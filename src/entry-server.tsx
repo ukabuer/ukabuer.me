@@ -1,12 +1,18 @@
+import { ComponentType } from "preact";
 import renderToString from "preact-render-to-string";
+import { createAsyncComponent } from "./common/AyncComponent";
 import App from './app';
 
-const routes: Record<string, () => any> = {};
+const routes: Record<string, ComponentType> = {};
 const items = import.meta.globEager("./routes/**/*.tsx");
 Object.entries(items).forEach(([k, v]) => {
-  routes[k] = () => v.default
+  routes[k] = createAsyncComponent(() => Promise.resolve(v))
 });
 
-export function renderToHtml(url: string) {
+export async function renderToHtml(url: string) {
+  if (!url.endsWith('/')) {
+    url += '/';
+  }
+  await (routes[`./routes${url}index.tsx`] as any).Load();
   return renderToString(<App url={url} routes={routes} />);
 }
