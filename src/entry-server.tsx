@@ -1,6 +1,7 @@
 import { ComponentType } from "preact";
 import renderToString from "preact-render-to-string";
 import { createAsyncComponent } from "./common/AyncComponent";
+import Head from './common/Head'
 import App from './app';
 
 const routes: Record<string, ComponentType> = {};
@@ -14,5 +15,7 @@ export async function renderToHtml(url: string) {
     url += '/';
   }
   await (routes[`./routes${url}index.tsx`] as any).Load();
-  return renderToString(<App url={url} routes={routes} />);
+  const app = renderToString(<App url={url} routes={routes} />);
+  const head = Head.rewind().map(n => renderToString(n)).join('');
+  return [app, head];
 }

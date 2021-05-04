@@ -1,7 +1,7 @@
 import { ComponentType, hydrate } from "preact";
+import { createAsyncComponent } from "./common/AyncComponent";
 import App from "./app";
 import "vite/dynamic-import-polyfill";
-import { createAsyncComponent } from "./common/AyncComponent";
 
 declare global {
   interface ImportMeta {

@@ -9,7 +9,7 @@ export default defineConfig({
     jsxInject: `import { h, Fragment } from 'preact'`,
   },
   build: {
-    sourcemap: true,
+    // sourcemap: true,
     manifest: true,
   },
 });
