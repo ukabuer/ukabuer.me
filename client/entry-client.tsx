@@ -1,5 +1,5 @@
 import { ComponentType, hydrate } from "preact";
-import { createAsyncComponent } from "./common/AyncComponent";
+import { createAsyncComponent, Module } from "./common/AyncComponent";
 import App from "./app";
 import "vite/dynamic-import-polyfill";
 
@@ -8,8 +8,8 @@ declare global {
     env: {
       SSR: boolean;
     };
-    globEager: (s: string) => Record<string, any>;
-    glob: (s: string) => Record<string, () => Promise<any>>;
+    globEager: (s: string) => Record<string, Module>;
+    glob: (s: string) => Record<string, () => Promise<Module>>;
   }
 }
 
@@ -20,12 +20,12 @@ Object.entries(items).forEach(([k, v]) => {
 });
 
 let path = window.location.pathname;
-if (!path.endsWith('/')) {
-  path += '/';
+if (!path.endsWith("/")) {
+  path += "/";
 }
 (routes[`./routes${path}index.tsx`] as any).Load().then(() => {
   hydrate(
     <App url={path} routes={routes} />,
     document.getElementById("root") || document.body
-    );
-  })
+  );
+});

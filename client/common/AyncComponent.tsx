@@ -1,6 +1,6 @@
 import { Component, ComponentType } from "preact";
 
-export type Module<P> = {
+export type Module<P = ComponentType> = {
   default?: P;
 };
 

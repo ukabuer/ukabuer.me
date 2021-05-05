@@ -1,5 +1,7 @@
 import { Component, cloneElement, VNode, ComponentChildren } from "preact";
 
+type AnyVNode = VNode<any>;
+
 const DOMAttributeNames: Record<string, string> = {
   acceptCharset: "accept-charset",
   className: "class",
@@ -10,7 +12,7 @@ const DOMAttributeNames: Record<string, string> = {
 const browser = typeof window !== "undefined";
 let mounted: Component[] = [];
 
-function reducer(components: Component["props"][]): VNode<any>[] {
+function reducer(components: Component["props"][]): AnyVNode[] {
   const allChildren: ComponentChildren[] = [];
   for (const c of components) {
     if (c.children) {
@@ -33,8 +35,8 @@ function reducer(components: Component["props"][]): VNode<any>[] {
     });
 }
 
-function updateClient(head: VNode<any>[]) {
-  const tags: Record<string, VNode<any>[]> = {};
+function updateClient(head: AnyVNode[]) {
+  const tags: Record<string, AnyVNode[]> = {};
   head.forEach((h) => {
     if (typeof h.type !== "string") return;
 
@@ -53,7 +55,7 @@ function updateClient(head: VNode<any>[]) {
   });
 }
 
-function updateElements(type: string, components: any[]) {
+function updateElements(type: string, components: AnyVNode[]) {
   const headEl = document.getElementsByTagName("head")[0];
   const oldTags = Array.prototype.slice.call(
     headEl.querySelectorAll(type + ".preact-head")
@@ -76,7 +78,7 @@ function updateElements(type: string, components: any[]) {
   });
 }
 
-function domify(component: VNode<any>) {
+function domify(component: AnyVNode) {
   if (typeof component.type != "string") {
     return;
   }
@@ -104,7 +106,7 @@ function domify(component: VNode<any>) {
 
 const METATYPES = ["name", "httpEquiv", "charSet", "itemProp"];
 
-function isVNode(h: ComponentChildren): h is VNode<any> {
+function isVNode(h: ComponentChildren): h is AnyVNode {
   return !Array.isArray(h) && !!Object.getOwnPropertyDescriptor(h, "type");
 }
 
@@ -114,7 +116,7 @@ function unique() {
   const tags: string[] = [];
   const metaTypes: string[] = [];
   const metaCategories: Record<string, string[]> = {};
-  return (h: ComponentChildren): h is VNode<any> => {
+  return (h: ComponentChildren): h is AnyVNode => {
     if (!isVNode(h)) return false;
 
     switch (h.type) {
@@ -145,7 +147,7 @@ function unique() {
   };
 }
 
-function updateTitle(component: VNode<any>) {
+function updateTitle(component: AnyVNode) {
   let title;
   if (component) {
     const { children } = component.props;
