@@ -21,7 +21,7 @@ async function createServer() {
       );
       template = await vite.transformIndexHtml(url, template);
 
-      const { renderToHtml } = await vite.ssrLoadModule("src/entry-server.tsx");
+      const { renderToHtml } = await vite.ssrLoadModule("client/entry-server.tsx");
 
       const [app, head] = await renderToHtml(url);
 
