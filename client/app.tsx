@@ -1,9 +1,9 @@
 import { ComponentType, FunctionComponent } from "preact";
 import Router, { Route, Link } from "preact-router";
 
-type Props = { url: string; routes: Record<string, ComponentType> };
+type Props = { url: string; pages: Record<string, ComponentType> };
 
-const App: FunctionComponent<Props> = ({ url, routes }) => {
+const App: FunctionComponent<Props> = ({ url, pages }) => {
   return (
     <div id="app">
       <div className="nav">
@@ -12,7 +12,7 @@ const App: FunctionComponent<Props> = ({ url, routes }) => {
         <Link href="/blog/">Blog</Link>
       </div>
       <Router url={url}>
-        {Object.keys(routes).map((route) => {
+        {Object.keys(pages).map((route) => {
           let path = route.substr(1).replace("index.tsx", "").replace('/routes', '');
           const matches = path.match(/\[(\w+)\]/g);
           if (matches && matches.length > 0)
@@ -27,7 +27,7 @@ const App: FunctionComponent<Props> = ({ url, routes }) => {
           return (
             <Route
               path={path}
-              component={routes[route]}
+              component={pages[route]}
             />
           );
         })}

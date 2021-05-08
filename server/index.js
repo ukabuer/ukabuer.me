@@ -23,11 +23,11 @@ async function createServer() {
 
       const { renderToHtml } = await vite.ssrLoadModule("client/entry-server.tsx");
 
-      const [app, head] = await renderToHtml(url);
+      const [data, head, app] = await renderToHtml(url);
 
       let html = template.replace('<!-- @HEAD@ -->', `
         ${head}
-        <script>window.SSR_URL = "${url}";</script>
+        <script>window.__PRELOAD_DATA__ = ${data ? JSON.stringify(data) : null};</script>
       `.trim());
       html = html.replace(`<!-- @APP@ -->`, app);
 

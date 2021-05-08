@@ -1,31 +1,23 @@
 import { ComponentType, hydrate } from "preact";
-import { createAsyncComponent, Module } from "./common/AyncComponent";
+import { createAsyncPage } from "./common/AyncPage";
 import App from "./app";
 import "vite/dynamic-import-polyfill";
+import './common/types'
 
-declare global {
-  interface ImportMeta {
-    env: {
-      SSR: boolean;
-    };
-    globEager: (s: string) => Record<string, Module>;
-    glob: (s: string) => Record<string, () => Promise<Module>>;
-  }
-}
-
-const routes: Record<string, ComponentType> = {};
+const pages: Record<string, ComponentType> = {};
 const items = import.meta.glob("./routes/**/*.tsx");
 Object.entries(items).forEach(([k, v]) => {
-  routes[k] = createAsyncComponent(() => v());
+  pages[k] = createAsyncPage(() => v());
 });
 
 let path = window.location.pathname;
 if (!path.endsWith("/")) {
   path += "/";
 }
-(routes[`./routes${path}index.tsx`] as any).Load().then(() => {
+
+(pages[`./routes${path}index.tsx`] as any).Load(window.__PRELOAD_DATA__).then(() => {
   hydrate(
-    <App url={path} routes={routes} />,
+    <App url={path} pages={pages} />,
     document.getElementById("root") || document.body
   );
 });
