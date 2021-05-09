@@ -1,5 +1,7 @@
 import { Component, ComponentType } from "preact";
+import { exec } from "preact-router";
 import Loading from "./Loading";
+import { AsyncPageType } from "./types";
 
 export type Module<P = ComponentType> = {
   default?: P;
@@ -7,19 +9,34 @@ export type Module<P = ComponentType> = {
 };
 
 export function createAsyncPage<Props>(
+  file: string,
   loader: () => Promise<Module<ComponentType<Props>>>
 ) {
+  let route = file.substr(1).replace("index.tsx", "").replace("/routes", "");
+  if (route == "/error.tsx"){
+    route ="/error";
+  }else {
+    const matches = route.match(/\[(\w+)\]/g);
+    if (matches && matches.length > 0) {
+      for (const match of matches) {
+        const slug = match.substring(1, match.length - 1);
+      route = route.replace(match, `:${slug}`);
+    }
+  }
+}
   let LoadedComponent: ComponentType<Props> | null = null;
   let GetPageDataFn: (() => Promise<unknown>) | null = null;
   let PageData: unknown | null = null;
 
-  return class AsyncPage extends Component<Props> {
+  const AsyncPage: AsyncPageType = class extends Component<Props> {
     static async Load(initial?: unknown) {
       const m = await loader();
       LoadedComponent = m.default || null;
       GetPageDataFn = m.preload || null;
-      PageData = initial;
-      return m;
+      if (initial) {
+        PageData = initial;
+      }
+      return LoadedComponent;
     }
 
     static async Preload() {
@@ -27,6 +44,14 @@ export function createAsyncPage<Props>(
         PageData = await GetPageDataFn();
       }
       return PageData;
+    }
+
+    static Route() {
+      return route;
+    }
+
+    static Match(url: string) {
+      return exec(url, route, {});
     }
 
     state = {
@@ -38,12 +63,13 @@ export function createAsyncPage<Props>(
       const { Page, page } = this.state;
       if (Page == null) {
         AsyncPage.Load().then(async () => {
-          this.setState({ Page: LoadedComponent });
+          const page = await AsyncPage.Preload();
+          this.setState({ Page: LoadedComponent, page });
         });
+        return;
       }
 
       if (page == null && GetPageDataFn != null) {
-        console.log(PageData)
         AsyncPage.Preload().then(() => {
           this.setState({ page: PageData });
         });
@@ -67,4 +93,6 @@ export function createAsyncPage<Props>(
       return <Page {...this.props} page={page} />;
     }
   };
+
+  return AsyncPage;
 }

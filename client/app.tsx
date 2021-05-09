@@ -1,7 +1,8 @@
-import { ComponentType, FunctionComponent } from "preact";
+import { FunctionComponent } from "preact";
 import Router, { Route, Link } from "preact-router";
+import { AsyncPageType } from "./common/types";
 
-type Props = { url: string; pages: Record<string, ComponentType> };
+type Props = { url: string; pages: Array<AsyncPageType> };
 
 const App: FunctionComponent<Props> = ({ url, pages }) => {
   return (
@@ -12,24 +13,13 @@ const App: FunctionComponent<Props> = ({ url, pages }) => {
         <Link href="/blog/">Blog</Link>
       </div>
       <Router url={url}>
-        {Object.keys(pages).map((route) => {
-          let path = route.substr(1).replace("index.tsx", "").replace('/routes', '');
-          const matches = path.match(/\[(\w+)\]/g);
-          if (matches && matches.length > 0)
-          {
-            for (const match of matches)
-            {
-              const slug = match.substring(1, match.length-1);
-              path = path.replace(match, `:${slug}`);
-            }
+        {pages.map((page) => {
+          const route = page.Route();
+          if (route == "/error") {
+            return <Route default component={page} />;
           }
 
-          return (
-            <Route
-              path={path}
-              component={pages[route]}
-            />
-          );
+          return <Route path={route} component={page} />;
         })}
       </Router>
     </div>

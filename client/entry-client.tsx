@@ -1,23 +1,36 @@
-import { ComponentType, hydrate } from "preact";
+import { hydrate } from "preact";
 import { createAsyncPage } from "./common/AyncPage";
 import App from "./app";
+import { AsyncPageType } from "./common/types";
 import "vite/dynamic-import-polyfill";
-import './common/types'
 
-const pages: Record<string, ComponentType> = {};
 const items = import.meta.glob("./routes/**/*.tsx");
-Object.entries(items).forEach(([k, v]) => {
-  pages[k] = createAsyncPage(() => v());
+let errorPage: AsyncPageType | null = null;
+const pages = Object.entries(items).map(([file, loader]) => {
+  const page = createAsyncPage(file, () => loader());
+  if (file == './routes/error.tsx'){
+    errorPage = page;
+  }
+  return page;
 });
 
-let path = window.location.pathname;
-if (!path.endsWith("/")) {
-  path += "/";
+
+function renderToDOM(url: string) {
+  if (!url.endsWith("/")) {
+    url += "/";
+  }
+
+  const page = pages.find((page) => page.Match(url)) || errorPage;
+  if (!page) {
+    return;
+  }
+
+  page.Load(window.__PRELOAD_DATA__).then(() => {
+    hydrate(
+      <App url={url} pages={pages} />,
+      document.getElementById("root") || document.body
+    );
+  });
 }
 
-(pages[`./routes${path}index.tsx`] as any).Load(window.__PRELOAD_DATA__).then(() => {
-  hydrate(
-    <App url={path} pages={pages} />,
-    document.getElementById("root") || document.body
-  );
-});
+renderToDOM(window.location.pathname);
