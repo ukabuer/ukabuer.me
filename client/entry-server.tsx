@@ -3,12 +3,13 @@ import { createAsyncPage } from "./common/AyncPage";
 import Head from "./common/Head";
 import App from "./app";
 import { AsyncPageType } from "./common/types";
+import fetch from "isomorphic-unfetch";
 
 const items = import.meta.globEager("./routes/**/*.tsx");
 let errorPage: AsyncPageType | null = null;
 const pages = Object.entries(items).map(([file, module]) => {
-  const page = createAsyncPage(file, () => Promise.resolve(module));
-  if (file == './routes/error.tsx'){
+  const page = createAsyncPage(file, () => Promise.resolve(module), fetch);
+  if (file == "./routes/error.tsx") {
     errorPage = page;
   }
   return page;
@@ -25,7 +26,7 @@ export async function renderToHtml(url: string) {
   }
 
   if (!page) {
-    return ['', '', 'Not Found'];
+    return ["", "", "Not Found"];
   }
 
   await page.Load();

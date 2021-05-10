@@ -1,5 +1,5 @@
 {
-  "include": ["client"],
+  "include": ["client", "server/entry-server.tsx"],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 

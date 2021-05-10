@@ -16,6 +16,7 @@
   "dependencies": {
     "@prefresh/vite": "^2.2.1",
     "express": "^4.17.1",
+    "isomorphic-unfetch": "^3.1.0",
     "preact": "^10.5.13",
     "preact-render-to-string": "^5.1.19",
     "preact-router": "^3.2.1",

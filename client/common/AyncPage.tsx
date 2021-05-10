@@ -10,22 +10,25 @@ export type Module<P = ComponentType> = {
 
 export function createAsyncPage<Props>(
   file: string,
-  loader: () => Promise<Module<ComponentType<Props>>>
+  loader: () => Promise<Module<ComponentType<Props>>>,
+  fetch: typeof window.fetch
 ) {
   let route = file.substr(1).replace("index.tsx", "").replace("/routes", "");
-  if (route == "/error.tsx"){
-    route ="/error";
-  }else {
+  if (route == "/error.tsx") {
+    route = "/error";
+  } else {
     const matches = route.match(/\[(\w+)\]/g);
     if (matches && matches.length > 0) {
       for (const match of matches) {
         const slug = match.substring(1, match.length - 1);
-      route = route.replace(match, `:${slug}`);
+        route = route.replace(match, `:${slug}`);
+      }
     }
   }
-}
   let LoadedComponent: ComponentType<Props> | null = null;
-  let GetPageDataFn: (() => Promise<unknown>) | null = null;
+  let GetPageDataFn:
+    | ((fetch: typeof window.fetch) => Promise<unknown>)
+    | null = null;
   let PageData: unknown | null = null;
 
   const AsyncPage: AsyncPageType = class extends Component<Props> {
@@ -41,7 +44,7 @@ export function createAsyncPage<Props>(
 
     static async Preload() {
       if (GetPageDataFn != null) {
-        PageData = await GetPageDataFn();
+        PageData = await GetPageDataFn(fetch);
       }
       return PageData;
     }

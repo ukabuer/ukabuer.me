@@ -21,14 +21,21 @@ async function createServer() {
       );
       template = await vite.transformIndexHtml(url, template);
 
-      const { renderToHtml } = await vite.ssrLoadModule("client/entry-server.tsx");
+      const { renderToHtml } = await vite.ssrLoadModule(
+        "client/entry-server.tsx"
+      );
 
       const [data, head, app] = await renderToHtml(url);
 
-      let html = template.replace('<!-- @HEAD@ -->', `
+      let html = template.replace(
+        "<!-- @HEAD@ -->",
+        `
         ${head}
-        <script>window.__PRELOAD_DATA__ = ${data ? JSON.stringify(data) : null};</script>
-      `.trim());
+        <script>window.__PRELOAD_DATA__ = ${
+          data ? JSON.stringify(data) : null
+        };</script>
+      `.trim()
+      );
       html = html.replace(`<!-- @APP@ -->`, app);
 
       res.status(200).set({ "Content-Type": "text/html" }).end(html);
