@@ -5,6 +5,7 @@ const { createServer: createViteServer } = require("vite");
 
 async function createServer() {
   const app = express();
+  app.use(express.static(path.resolve(__dirname, "../static")));
 
   const vite = await createViteServer({
     server: { middlewareMode: true },

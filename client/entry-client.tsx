@@ -3,7 +3,6 @@ import { createAsyncPage } from "./common/AyncPage";
 import App from "./app";
 import { AsyncPageType } from "./common/types";
 import fetch from "isomorphic-unfetch";
-import "vite/dynamic-import-polyfill";
 
 const items = import.meta.glob("./routes/**/*.tsx");
 let errorPage: AsyncPageType | null = null;
