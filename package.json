@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build:client": "vite build --outDir dist/client --ssrManifest",
-    "build:server": "vite build --outDir dist/server --ssr src/entry-server.tsx",
+    "build:server": "vite build --outDir dist/server --ssr client/entry-server.tsx",
     "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

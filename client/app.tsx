@@ -1,6 +1,7 @@
 import { FunctionComponent } from "preact";
 import Router, { Route, Link } from "preact-router";
 import { AsyncPageType } from "./common/types";
+import './style.scss'
 
 type Props = { url: string; pages: Array<AsyncPageType> };
 
