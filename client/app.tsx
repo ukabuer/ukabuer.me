@@ -1,18 +1,16 @@
 import { FunctionComponent } from "preact";
-import Router, { Route, Link } from "preact-router";
+import Router, { Route } from "preact-router";
 import { AsyncPageType } from "./common/types";
-import './style.scss'
+import Header from "./common/Header";
+import Footer from "./common/Footer";
+import "./app.scss";
 
 type Props = { url: string; pages: Array<AsyncPageType> };
 
 const App: FunctionComponent<Props> = ({ url, pages }) => {
   return (
     <div id="app">
-      <div className="nav">
-        <Link href="/">Home</Link>
-        <Link href="/about/">About</Link>
-        <Link href="/blog/">Blog</Link>
-      </div>
+        <Header />
       <Router url={url}>
         {pages.map((page) => {
           const route = page.Route();
@@ -23,6 +21,7 @@ const App: FunctionComponent<Props> = ({ url, pages }) => {
           return <Route path={route} component={page} />;
         })}
       </Router>
+        <Footer />
     </div>
   );
 };
