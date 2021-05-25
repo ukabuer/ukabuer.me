@@ -6,10 +6,10 @@ const Header: FunctionComponent = () => {
   return (
     <header>
       <nav>
-        <Link href="/">Home</Link>
-        <Link href="/works/">Works</Link>
-        <Link href="/blog/">Blog</Link>
-        <Link href="/about/">About</Link>
+        <Link href="/" activeClassName="active">Home</Link>
+        <Link href="/works/" activeClassName="active">Works</Link>
+        <Link href="/blog/" activeClassName="active">Blog</Link>
+        <Link href="/about/" activeClassName="active">About</Link>
       </nav>
     </header>
   );

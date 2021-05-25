@@ -1,6 +1,8 @@
 import { Component, ComponentType } from "preact";
 import { exec } from "preact-router";
 import Loading from "./Loading";
+import Header from "./Header";
+import Footer from "./Footer";
 import { AsyncPageType } from "./types";
 
 export type Module<P = ComponentType> = {
@@ -86,14 +88,14 @@ export function createAsyncPage<Props>(
     render() {
       const { Page, page } = this.state;
       if (Page == null) {
-        return <Loading />;
+        return <><Header /><Loading /><Footer/></>;
       }
 
       if (page == null && GetPageDataFn != null) {
-        return <Loading />;
+        return <><Header /><Loading /><Footer/></>;
       }
 
-      return <Page {...this.props} page={page} />;
+      return <><Header /><Page {...this.props} page={page} /><Footer /></>;
     }
   };
 

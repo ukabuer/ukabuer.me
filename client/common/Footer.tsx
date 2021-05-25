@@ -8,7 +8,7 @@ const Footer: FunctionComponent = () => {
     <footer>
       <p>May the Goddess smile upon you.</p>
       <p>
-        <span>© 2014 ~ {new Date().getFullYear()}</span>
+        <span>© 2014 ~ {new Date().getFullYear()} </span>
         <Link href={site.author.link}>{site.author.name}</Link>
       </p>
       <p>
