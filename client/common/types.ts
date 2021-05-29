@@ -15,13 +15,9 @@ declare global {
   }
 }
 
-declare module "preact-router" {
-  export function exec(url: string, path: string, opt: unknown): Record<string, string>;
-}
-
 export interface AsyncPageType extends ComponentClass<any> {
   Load(initial?: unknown): Promise<ComponentType<any> | null>;
   Preload(): Promise<unknown>;
-  Match(path: string): Record<string, string>;
+  Match(path: string): boolean;
   Route(): string;
 }

@@ -1,15 +1,32 @@
 import { FunctionComponent } from "preact";
-import { Link } from "preact-router";
-import './header.scss'
+import { Link, useRoute } from "wouter-preact";
+import "./header.scss";
 
 const Header: FunctionComponent = () => {
+  const [isHome] = useRoute("/");
+  const [isWorksPage] = useRoute("/works/");
+  const [isBlogPage] = useRoute("/blog/");
+  const [isArticlePage] = useRoute("/blog/:article");
+  const [isAboutPage] = useRoute("/about/");
+
   return (
-    <header>
+    <header class={isHome ? "home" : undefined}>
       <nav>
-        <Link href="/" activeClassName="active">Home</Link>
-        <Link href="/works/" activeClassName="active">Works</Link>
-        <Link href="/blog/" activeClassName="active">Blog</Link>
-        <Link href="/about/" activeClassName="active">About</Link>
+        <Link href="/" className={isHome ? "active" : undefined}>
+          首页
+        </Link>
+        <Link href="/works/" className={isWorksPage ? "active" : undefined}>
+          项目
+        </Link>
+        <Link
+          href="/blog/"
+          className={isBlogPage || isArticlePage ? "active" : undefined}
+        >
+          文章
+        </Link>
+        <Link href="/about/" className={isAboutPage ? "active" : undefined}>
+          关于
+        </Link>
       </nav>
     </header>
   );

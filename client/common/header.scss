@@ -23,10 +23,10 @@ header {
       color: #333;
       text-decoration: none;
       &:hover,
-      &.highlight {
+      &.active {
         border-bottom: 2px solid #ccc;
       }
-      &.highlight {
+      &.active {
         border-color: #333;
       }
       @media (--small-viewport) {

@@ -12,15 +12,15 @@ type Props = {
 
 const AboutPage: FunctionComponent<Props> = ({ page }) => {
   return (
-    <div className="page about">
+    <div className="page works">
       <Head>
-        <title>About</title>
+        <title>项目</title>
       </Head>
       <div className="banner">
         <div>{page.slogan}</div>
       </div>
       <div className="section">
-        <article>balabala</article>
+        <article></article>
       </div>
     </div>
   );
@@ -28,7 +28,7 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
 
 export async function preload(): Promise<PageData> {
   return {
-    slogan: "关于ukabuer的一切",
+    slogan: "平凡的世界",
   };
 }
 

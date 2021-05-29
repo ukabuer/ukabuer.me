@@ -3,14 +3,9 @@ import "./loading.scss";
 
 const Loading: FunctionComponent = () => {
   return (
-    <div>
-      <div class="lds-ring">
-        <div />
-        <div />
-        <div />
+      <div class="page-loader">
         <div />
       </div>
-    </div>
   );
 };
 

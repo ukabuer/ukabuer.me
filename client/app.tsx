@@ -1,25 +1,25 @@
 import { FunctionComponent } from "preact";
-import Router, { Route } from "preact-router";
+import { Switch, Route } from "wouter-preact";
 import { AsyncPageType } from "./common/types";
+import Header from "./common/Header";
+import Footer from "./common/Footer";
+import ErrorPage from "./error";
 import "./app.scss";
 
-type Props = { url: string; pages: Array<AsyncPageType> };
+type Props = { pages: Array<AsyncPageType> };
 
-const App: FunctionComponent<Props> = ({ url, pages }) => {
+const App: FunctionComponent<Props> = ({ pages }) => {
   return (
     <div id="app">
-      <div className="page">
-        <Router url={url}>
+      <Header />
+        <Switch>
           {pages.map((page) => {
             const route = page.Route();
-            if (route == "/error") {
-              return <Route default component={page} />;
-            }
-
+            console.log(route)
             return <Route path={route} component={page} />;
-          })}
-        </Router>
-      </div>
+          }).concat([<Route component={ErrorPage} />])}
+        </Switch>
+      <Footer/>
     </div>
   );
 };

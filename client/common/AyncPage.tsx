@@ -1,8 +1,6 @@
-import { Component, ComponentType } from "preact";
-import { exec } from "preact-router";
+import { Component, ComponentChild, ComponentType } from "preact";
+import makeMatcher from "../../node_modules/wouter-preact/matcher";
 import Loading from "./Loading";
-import Header from "./Header";
-import Footer from "./Footer";
 import { AsyncPageType } from "./types";
 
 export type Module<P = ComponentType> = {
@@ -10,27 +8,24 @@ export type Module<P = ComponentType> = {
   preload?: () => Promise<unknown>;
 };
 
+let prev: ComponentChild | null = null;
+
 export function createAsyncPage<Props>(
   file: string,
   loader: () => Promise<Module<ComponentType<Props>>>,
   fetch: typeof window.fetch
 ) {
   let route = file.substr(1).replace("index.tsx", "").replace("/routes", "");
-  if (route == "/error.tsx") {
-    route = "/error";
-  } else {
-    const matches = route.match(/\[(\w+)\]/g);
-    if (matches && matches.length > 0) {
-      for (const match of matches) {
-        const slug = match.substring(1, match.length - 1);
-        route = route.replace(match, `:${slug}`);
-      }
+  const matches = route.match(/\[(\w+)\]/g);
+  if (matches && matches.length > 0) {
+    for (const match of matches) {
+      const slug = match.substring(1, match.length - 1);
+      route = route.replace(match, `:${slug}`);
     }
   }
   let LoadedComponent: ComponentType<Props> | null = null;
-  let GetPageDataFn:
-    | ((fetch: typeof window.fetch) => Promise<unknown>)
-    | null = null;
+  let GetPageDataFn: ((fetch: typeof window.fetch) => Promise<unknown>) | null =
+    null;
   let PageData: unknown | null = null;
 
   const AsyncPage: AsyncPageType = class extends Component<Props> {
@@ -56,7 +51,7 @@ export function createAsyncPage<Props>(
     }
 
     static Match(url: string) {
-      return exec(url, route, {});
+      return makeMatcher()(url, route)[0];
     }
 
     state = {
@@ -88,14 +83,31 @@ export function createAsyncPage<Props>(
     render() {
       const { Page, page } = this.state;
       if (Page == null) {
-        return <><Header /><Loading /><Footer/></>;
+        if (prev != null) {
+          return (
+            <>
+              <Loading />
+              {prev}
+            </>
+          );
+        }
+        return <Loading />;
       }
 
       if (page == null && GetPageDataFn != null) {
-        return <><Header /><Loading /><Footer/></>;
+        if (prev != null) {
+          return (
+            <>
+              <Loading />
+              {prev}
+            </>
+          );
+        }
+        return <Loading />;
       }
 
-      return <><Header /><Page {...this.props} page={page} /><Footer /></>;
+      prev = <Page {...this.props} page={page} />;
+      return prev;
     }
   };
 

@@ -1,5 +1,5 @@
 import { FunctionComponent } from "preact";
-import Head from "../common/Head";
+import Head from "./common/Head";
 
 const ErrorPage: FunctionComponent = () => {
   return (

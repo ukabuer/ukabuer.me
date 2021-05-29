@@ -1,11 +1,13 @@
 import { FunctionComponent } from "preact";
-import { Link } from "preact-router";
+import { Link, useRoute } from "wouter-preact";
 import site from "./site";
 import "./footer.scss";
 
 const Footer: FunctionComponent = () => {
+  const [match] = useRoute("/");
+
   return (
-    <footer>
+    <footer className={match ? 'home' : undefined}>
       <p>May the Goddess smile upon you.</p>
       <p>
         <span>© 2014 ~ {new Date().getFullYear()} </span>
