@@ -17,7 +17,7 @@ declare global {
 
 export interface AsyncPageType extends ComponentClass<any> {
   Load(initial?: unknown): Promise<ComponentType<any> | null>;
-  Preload(): Promise<unknown>;
-  Match(path: string): boolean;
+  Preload(params?: any): Promise<unknown>;
+  Match(path: string): [boolean, any];
   Route(): string;
 }

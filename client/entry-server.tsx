@@ -4,11 +4,11 @@ import Head from "./common/Head";
 import App from "./app";
 import fetch from "isomorphic-unfetch";
 import { Router } from "wouter-preact";
-import staticLocationHook from "wouter-preact/cjs/static-location";
+import staticLocationHook from "../node_modules/wouter-preact/static-location";
 
 const items = import.meta.globEager("./routes/**/*.tsx");
 const pages = Object.entries(items).map(([file, module]) => {
-  const page = createAsyncPage(file, () => Promise.resolve(module), fetch);
+  const page = createAsyncPage(file, () => Promise.resolve(module), (url) => fetch('http://localhost:3000' + url));
   return page;
 });
 
@@ -17,7 +17,7 @@ export async function renderToHtml(url: string) {
     url += "/";
   }
 
-  const page = pages.find((page) => page.Match(url));
+  const page = pages.find((page) => page.Match(url)[0]);
   let data = null;
   if (page) {
     await page.Load();

@@ -24,7 +24,7 @@ export function createAsyncPage<Props>(
     }
   }
   let LoadedComponent: ComponentType<Props> | null = null;
-  let GetPageDataFn: ((fetch: typeof window.fetch) => Promise<unknown>) | null =
+  let GetPageDataFn: ((fetch: typeof window.fetch, params?: any) => Promise<unknown>) | null =
     null;
   let PageData: unknown | null = null;
 
@@ -39,9 +39,9 @@ export function createAsyncPage<Props>(
       return LoadedComponent;
     }
 
-    static async Preload() {
+    static async Preload(params?: any) {
       if (GetPageDataFn != null) {
-        PageData = await GetPageDataFn(fetch);
+        PageData = await GetPageDataFn(fetch, params);
       }
       return PageData;
     }
@@ -51,7 +51,7 @@ export function createAsyncPage<Props>(
     }
 
     static Match(url: string) {
-      return makeMatcher()(url, route)[0];
+      return makeMatcher()(url, route);
     }
 
     state = {
@@ -61,16 +61,17 @@ export function createAsyncPage<Props>(
 
     componentDidMount() {
       const { Page, page } = this.state;
+      const { params = {} } = this.props as any;
       if (Page == null) {
         AsyncPage.Load().then(async () => {
-          const page = await AsyncPage.Preload();
+          const page = await AsyncPage.Preload(params);
           this.setState({ Page: LoadedComponent, page });
         });
         return;
       }
 
       if (page == null && GetPageDataFn != null) {
-        AsyncPage.Preload().then(() => {
+        AsyncPage.Preload(params).then(() => {
           this.setState({ page: PageData });
         });
       }

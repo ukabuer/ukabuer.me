@@ -15,7 +15,6 @@ const App: FunctionComponent<Props> = ({ pages }) => {
         <Switch>
           {pages.map((page) => {
             const route = page.Route();
-            console.log(route)
             return <Route path={route} component={page} />;
           }).concat([<Route component={ErrorPage} />])}
         </Switch>

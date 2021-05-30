@@ -3,7 +3,19 @@ import Head from "../../common/Head";
 import "./style.scss";
 
 type PageData = {
+  title: string;
   slogan: string;
+  works: Record<
+    string,
+    Array<{
+      title: string;
+      category: string;
+      image: string;
+      link: string;
+      description: string;
+      features: Array<string>;
+    }>
+  >;
 };
 
 type Props = {
@@ -14,22 +26,72 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
   return (
     <div className="page works">
       <Head>
-        <title>项目</title>
+        <title>{page.title}</title>
       </Head>
-      <div className="banner">
+      <div class="banner">
         <div>{page.slogan}</div>
       </div>
-      <div className="section">
-        <article></article>
+
+      <div class="section">
+        {Object.keys(page.works).map((subtitle) => (
+          <>
+            <h1 class="center">{subtitle}</h1>
+            {page.works[subtitle] && (
+              <div class="row">
+                {page.works[subtitle].map((item) =>
+                  item.image ? (
+                    <div class="work-item image">
+                      <div>
+                        <span>{item.category}</span>
+                        <h1>
+                          <a href={item.link} target="_blank" rel="noopener">
+                            {item.title}
+                          </a>
+                        </h1>
+                        <img src={item.image} alt={item.title} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div class="work-item text">
+                      <div>
+                        <span>{item.category}</span>
+                        <h1>
+                          <a href={item.link} target="_blank" rel="noopener">
+                            {item.title}
+                          </a>
+                        </h1>
+
+                        <article>
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          ></p>
+                          <p>
+                            <b>Features</b>
+                          </p>
+                          <ul>
+                            {item.features.map((feature) => (
+                              <li>{feature}</li>
+                            ))}
+                          </ul>
+                        </article>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            )}
+          </>
+        ))}
       </div>
     </div>
   );
 };
 
-export async function preload(): Promise<PageData> {
-  return {
-    slogan: "平凡的世界",
-  };
+export async function preload(fetch: any) {
+  const res = await fetch('/api/works/');
+  return res.json();
 }
 
 export default AboutPage;

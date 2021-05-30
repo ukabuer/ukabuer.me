@@ -1,16 +1,38 @@
 import { FunctionComponent } from "preact";
+import Head from "../../../common/Head";
+import "./style.scss";
 
 type Props = {
-  url: string;
+  page: {
+    title: string;
+    date: string;
+    content: string;
+  };
 };
 
-const ArticlePage: FunctionComponent<Props> = (props) => {
+const ArticlePage: FunctionComponent<Props> = ({ page }) => {
   return (
-    <div>
-      <div>Article Page</div>
-      <p>{JSON.stringify(props)}</p>
+    <div className="page article">
+      <Head>
+        <title>{page.title}</title>
+      </Head>
+      <div class="banner">
+        <div>
+          <h1>{page.title}</h1>
+          <p>{page.date}</p>
+        </div>
+      </div>
+      <div className="section">
+        <article dangerouslySetInnerHTML={{ __html: page.content }}></article>
+      </div>
     </div>
   );
 };
+
+export async function preload(fetch: any, params: any) {
+  const res = await fetch(`/api/blog/${params.slug}/`);
+  console.log(params.slug);
+  return res.json();
+}
 
 export default ArticlePage;

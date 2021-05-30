@@ -1,24 +1,94 @@
-import { useEffect, useState } from "preact/hooks";
 import { FunctionComponent } from "preact";
 import Head from "../common/Head";
+import site from "../common/site";
+import "./style.scss";
 
-const IndexPage: FunctionComponent = () => {
-  const [time, setTime] = useState(0);
+type Props = {
+  page: {
+    title: string;
+    projects: Array<{
+      title: string;
+      link: string;
+      thumbnail: string;
+      description: string;
+    }>;
+  }
+}
 
-  useEffect(() => {
-    const timer = setInterval(() => setTime(t => t + 1), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
+const IndexPage: FunctionComponent<Props> = ({ page }) => {
   return (
     <div className="page home">
       <Head>
-        <title>Index</title>
+        <title>{page.title}</title>
       </Head>
-      <h1>Index Page</h1>
-      <p>Time: {time}</p>
+      <div class="banner">
+        <canvas />
+      </div>
+      <div class="profile card">
+        <div>
+          <img src={site.author.avatar} alt="" />
+          <div class="card-main">
+            <div>
+              <span class="card-title">{site.author.name}</span>
+            </div>
+            <div class="gray">{site.author.identities.join(" / ")}</div>
+            <div class="social">
+              {site.author.social.map((social) => (
+                <>
+                  <a
+                    href={social.link}
+                    title={social.name}
+                    target="_blank"
+                    class="icon-svg"
+                  >
+                    <img src={social.icon} alt="" />
+                  </a>
+                  <span>&nbsp;</span>
+                </>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="card-intro">
+          <span>{site.author.introduce}</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <h1>Gallery</h1>
+
+        <div class="row">
+          {page.projects.map((item) => (
+            <div class="project">
+              <div class="card">
+                <div class="card-thumbnail">
+                  <a href={item.link} target="_blank">
+                    <img src={item.thumbnail} alt="" />
+                  </a>
+                </div>
+
+                <div class="card-intro">
+                  <div>
+                    <a href={item.link} class="card-title" target="_blank">
+                      {item.title}
+                    </a>
+                  </div>
+                  <div class="gray">
+                    <span>{item.description}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
+
+export async function preload(fetch: any) {
+  const res = await fetch("/api/");
+  return res.json();
+}
 
 export default IndexPage;
