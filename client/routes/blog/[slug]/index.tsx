@@ -31,7 +31,6 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
 
 export async function preload(fetch: any, params: any) {
   const res = await fetch(`/api/blog/${params.slug}/`);
-  console.log(params.slug);
   return res.json();
 }
 

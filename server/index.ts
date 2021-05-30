@@ -41,7 +41,7 @@ async function createServer() {
     const url = req.originalUrl;
 
     try {
-      let template = fs.readFileSync("./index.html", "utf-8");
+      let template = fs.readFileSync("./client/index.html", "utf-8");
       template = await vite.transformIndexHtml(url, template);
 
       const { renderToHtml } = await vite.ssrLoadModule(
