@@ -21,7 +21,7 @@ export async function renderToHtml(url: string) {
   let data = null;
   if (page) {
     await page.Load();
-    data = await page.Preload();
+    data = await page.Preload(page.Match(url)[1]);
   }
   const app = renderToString(
     <Router hook={staticLocationHook(url)}>
