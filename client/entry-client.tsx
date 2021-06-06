@@ -1,6 +1,6 @@
 import { hydrate } from "preact";
 import { createAsyncPage } from "./common/AyncPage";
-import App from "./app";
+import App, { preloaded } from "./app";
 import fetch from "isomorphic-unfetch";
 import { Router } from "wouter-preact";
 
@@ -15,10 +15,11 @@ function renderToDOM(url: string) {
     url += "/";
   }
 
-  const page = pages.find((page) => page.Match(url));
+  const page = pages.find((page) => page.Match(url)[0]);
   let preload = Promise.resolve(null as any);
   if (page) {
-    preload = page.Load(window.__PRELOAD_DATA__);
+    preload = page.LoadComponent();
+    preloaded[url] = window.__PRELOAD_DATA__ || {};
   }
 
   preload.then(() => {

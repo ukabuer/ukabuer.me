@@ -1,14 +1,12 @@
-import { Component, ComponentChild, ComponentType } from "preact";
+import { Component, ComponentType } from "preact";
 import makeMatcher from "../../node_modules/wouter-preact/matcher";
-import Loading from "./Loading";
 import { AsyncPageType } from "./types";
+import AppContext from "../common/context";
 
 export type Module<P = ComponentType> = {
   default?: P;
   preload?: () => Promise<unknown>;
 };
-
-let prev: ComponentChild | null = null;
 
 export function createAsyncPage<Props>(
   file: string,
@@ -24,26 +22,27 @@ export function createAsyncPage<Props>(
     }
   }
   let LoadedComponent: ComponentType<Props> | null = null;
-  let GetPageDataFn: ((fetch: typeof window.fetch, params?: any) => Promise<unknown>) | null =
-    null;
-  let PageData: unknown | null = null;
+  let GetPageDataFn:
+    | ((fetch: typeof window.fetch, params?: any) => Promise<unknown>)
+    | null = null;
 
   const AsyncPage: AsyncPageType = class extends Component<Props> {
-    static async Load(initial?: unknown) {
+    static async LoadComponent() {
       const m = await loader();
       LoadedComponent = m.default || null;
       GetPageDataFn = m.preload || null;
-      if (initial) {
-        PageData = initial;
-      }
-      return LoadedComponent;
     }
 
-    static async Preload(params?: any) {
-      if (GetPageDataFn != null) {
-        PageData = await GetPageDataFn(fetch, params);
+    static async Load(params?: any) {
+      if (LoadedComponent == null) {
+        await AsyncPage.LoadComponent();
       }
-      return PageData;
+
+      if (GetPageDataFn != null) {
+        return GetPageDataFn(fetch, params);
+      }
+
+      return {};
     }
 
     static Route() {
@@ -56,59 +55,18 @@ export function createAsyncPage<Props>(
 
     state = {
       Page: LoadedComponent,
-      page: PageData,
     };
 
-    componentDidMount() {
-      const { Page, page } = this.state;
-      const { params = {} } = this.props as any;
-      if (Page == null) {
-        AsyncPage.Load().then(async () => {
-          const page = await AsyncPage.Preload(params);
-          this.setState({ Page: LoadedComponent, page });
-        });
-        return;
-      }
-
-      if (page == null && GetPageDataFn != null) {
-        AsyncPage.Preload(params).then(() => {
-          this.setState({ page: PageData });
-        });
-      }
-    }
-
-    componentWillUnmount() {
-      PageData = null;
-    }
-
     render() {
-      const { Page, page } = this.state;
+      const { Page } = this.state;
       if (Page == null) {
-        if (prev != null) {
-          return (
-            <>
-              <Loading />
-              {prev}
-            </>
-          );
-        }
-        return <Loading />;
+        return null;
       }
-
-      if (page == null && GetPageDataFn != null) {
-        if (prev != null) {
-          return (
-            <>
-              <Loading />
-              {prev}
-            </>
-          );
-        }
-        return <Loading />;
-      }
-
-      prev = <Page {...this.props} page={page} />;
-      return prev;
+      return (
+        <AppContext.Consumer>
+          {(value) => <Page {...this.props} page={value.page} />}
+        </AppContext.Consumer>
+      );
     }
   };
 
