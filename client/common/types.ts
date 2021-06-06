@@ -1,4 +1,4 @@
-import { ComponentType, ComponentClass } from "preact";
+import { ComponentClass } from "preact";
 import { Module } from "./AyncPage";
 
 declare global {
@@ -19,5 +19,5 @@ export interface AsyncPageType extends ComponentClass<any> {
   LoadComponent(): Promise<void>;
   Load(params?: any): Promise<unknown>;
   Match(path: string): [boolean, any];
-  Route(): string;
+  route: string;
 }

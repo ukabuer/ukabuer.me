@@ -45,9 +45,7 @@ export function createAsyncPage<Props>(
       return {};
     }
 
-    static Route() {
-      return route;
-    }
+    static route: string = route;
 
     static Match(url: string) {
       return makeMatcher()(route, url);

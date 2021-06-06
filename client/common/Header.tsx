@@ -1,13 +1,16 @@
 import { FunctionComponent } from "preact";
-import { Link, useRoute } from "wouter-preact";
+import { Link, useRouter } from "wouter-preact";
+import { useAppContext } from "./context";
 import "./header.scss";
+import Loading from "./Loading";
 
 const Header: FunctionComponent = () => {
-  const [isHome] = useRoute("/");
-  const [isWorksPage] = useRoute("/works/");
-  const [isBlogPage] = useRoute("/blog/");
-  const [isArticlePage] = useRoute("/blog/:article");
-  const [isAboutPage] = useRoute("/about/");
+  const { matcher } = useRouter();
+  const { location, loading } = useAppContext();
+  const [isHome] = matcher("/", location);
+  const [isWorksPage] = matcher("/works/", location);
+  const [isBlogPage] = matcher("/blog/**", location);
+  const [isAboutPage] = matcher("/about/", location);
 
   return (
     <header class={isHome ? "home" : undefined}>
@@ -18,16 +21,14 @@ const Header: FunctionComponent = () => {
         <Link href="/works/" className={isWorksPage ? "active" : undefined}>
           项目
         </Link>
-        <Link
-          href="/blog/"
-          className={isBlogPage || isArticlePage ? "active" : undefined}
-        >
+        <Link href="/blog/" className={isBlogPage ? "active" : undefined}>
           文章
         </Link>
         <Link href="/about/" className={isAboutPage ? "active" : undefined}>
           关于
         </Link>
       </nav>
+      {loading && <Loading />}
     </header>
   );
 };

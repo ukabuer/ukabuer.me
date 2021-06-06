@@ -8,27 +8,23 @@ import Footer from "./common/Footer";
 import ErrorPage from "./error";
 import "./app.scss";
 
-type Props = { pages: Array<AsyncPageType> };
+type Props = {
+  pages: Array<AsyncPageType>;
+  initial?: unknown;
+};
 
-export const preloaded: Record<string, unknown> = {};
-
-const App: FunctionComponent<Props> = ({ pages }) => {
+const App: FunctionComponent<Props> = ({ pages, initial }) => {
   const { matcher } = useRouter();
-  const [prevLocation, setPrevLocation] = useState<null | string>(null);
   const [currentLocation] = useLocation();
-  const [ctx, setCtx] = useState({ page: preloaded[currentLocation] || {} });
+  const [renderLocation, setRenderLocation] = useState(currentLocation);
+  const [page, setPage] = useState<unknown>(initial);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (preloaded[currentLocation]) {
-      setPrevLocation(currentLocation);
-      setCtx({ page: preloaded[currentLocation] });
-      return;
-    }
-
     let matchedParams: unknown | null = null;
     let macthedPage: AsyncPageType | null = null;
     for (const page of pages) {
-      const match = matcher(page.Route(), currentLocation);
+      const match = matcher(page.route, currentLocation);
       const matched = match[0];
       if (matched) {
         matchedParams = match[1];
@@ -38,28 +34,36 @@ const App: FunctionComponent<Props> = ({ pages }) => {
     }
 
     if (!macthedPage) {
-      // TODO
       return;
     }
 
-    macthedPage.Load(matchedParams).then((data) => {
-      preloaded[currentLocation] = data;
-      setCtx({ page: data });
-      setPrevLocation(currentLocation);
-    });
+    setLoading(true);
+    macthedPage
+      .Load(matchedParams)
+      .then((data) => {
+        setPage(data);
+        setRenderLocation(currentLocation);
+      })
+      .then(() => {
+        setLoading(false);
+        window.scrollTo(0, 0);
+      });
   }, [currentLocation, matcher, pages]);
-
-  const location = prevLocation || currentLocation;
 
   return (
     <div id="app">
-      <AppContext.Provider value={ctx}>
+      <AppContext.Provider
+        value={{
+          page,
+          loading,
+          location: renderLocation,
+        }}
+      >
         <Header />
-        <Switch location={location}>
+        <Switch location={renderLocation}>
           {pages
             .map((page) => {
-              const route = page.Route();
-              return <Route path={route} component={page} />;
+              return <Route path={page.route} component={page} />;
             })
             .concat([<Route component={ErrorPage} />])}
         </Switch>

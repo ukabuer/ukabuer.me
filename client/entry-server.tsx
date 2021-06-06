@@ -1,7 +1,7 @@
 import renderToString from "preact-render-to-string";
 import { createAsyncPage } from "./common/AyncPage";
 import Head from "./common/Head";
-import App, { preloaded } from "./app";
+import App from "./app";
 import fetch from "isomorphic-unfetch";
 import { Router } from "wouter-preact";
 import staticLocationHook from "../node_modules/wouter-preact/static-location";
@@ -25,11 +25,10 @@ export async function renderToHtml(url: string) {
   let data = null;
   if (page) {
     data = await page.Load(page.Match(url)[1]);
-    preloaded[url] = data;
   }
   const app = renderToString(
     <Router hook={staticLocationHook(url)}>
-      <App pages={pages} />
+      <App pages={pages} initial={data} />
     </Router>
   );
   const head = Head.rewind()
