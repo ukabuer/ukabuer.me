@@ -10,7 +10,7 @@ export async function get(req: any, res: any) {
   });
   if (!lookup.has(slug)) {
     res.json({
-      message: `Not found`,
+      error: `Not found`,
     });
     return;
   }
