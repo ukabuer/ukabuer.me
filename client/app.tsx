@@ -11,9 +11,14 @@ import "./app.scss";
 type Props = {
   pages: Array<AsyncPageType>;
   initial?: unknown;
+  error?: string;
 };
 
-const App: FunctionComponent<Props> = ({ pages, initial }) => {
+const App: FunctionComponent<Props> = ({
+  pages,
+  initial,
+  error: serverError,
+}) => {
   const { matcher } = useRouter();
   const [currentLocation] = useLocation();
   const [renderLocation, setRenderLocation] = useState(currentLocation);
@@ -44,11 +49,16 @@ const App: FunctionComponent<Props> = ({ pages, initial }) => {
         setPage(data);
         setRenderLocation(currentLocation);
       })
+      .catch((err) => {
+        setPage({ error: err.message });
+      })
       .then(() => {
         setLoading(false);
         window.scrollTo(0, 0);
       });
   }, [currentLocation, matcher, pages]);
+
+  const location = (page as any).error ? "/error" : renderLocation;
 
   return (
     <div id="app">
@@ -56,11 +66,11 @@ const App: FunctionComponent<Props> = ({ pages, initial }) => {
         value={{
           page,
           loading,
-          location: renderLocation,
+          location,
         }}
       >
         <Header />
-        <Switch location={renderLocation}>
+        <Switch location={location}>
           {pages
             .map((page) => {
               return <Route path={page.route} component={page} />;

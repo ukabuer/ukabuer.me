@@ -1,13 +1,22 @@
 import { FunctionComponent } from "preact";
+import { useAppContext } from "./common/context";
 import Head from "./common/Head";
 
+type ErrorData = {
+  error: string;
+};
+
 const ErrorPage: FunctionComponent = () => {
+  const { page } = useAppContext();
+
   return (
-    <div>
+    <div className="page error">
       <Head>
-        <title>Not Found</title>
+        <title>Error</title>
       </Head>
-      <h1>Not Found</h1>
+      <div className="section">
+        <h1>{(page as ErrorData).error}</h1>
+      </div>
     </div>
   );
 };

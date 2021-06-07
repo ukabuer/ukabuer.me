@@ -150,3 +150,10 @@ article .row {
 .article-image img {
   margin: 0 auto;
 }
+
+.page.error {
+  > .section {
+    text-align: center;
+    margin: 30px auto 0;
+  }
+}
