@@ -18,5 +18,5 @@ export async function get(req: any, res: any) {
   const page: any = await getData(lookup.get(slug));
   page.date = formatDate(page.date);
 
-  res.json(page);
+  res.end(JSON.stringify(page));
 }

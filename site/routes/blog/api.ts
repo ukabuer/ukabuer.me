@@ -24,8 +24,10 @@ export async function get(req: any, res: any) {
       return item;
     });
 
-  res.json({
-    ...data,
-    posts: sorted,
-  });
+  res.end(
+    JSON.stringify({
+      ...data,
+      posts: sorted,
+    })
+  );
 }

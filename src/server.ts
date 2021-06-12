@@ -1,17 +1,17 @@
 import fs from "fs";
+import polka from "polka";
+import sirv from "sirv";
 import { resolve } from "path";
-import express from "express";
 import { createServer as createViteServer } from "vite";
 import glob from "fast-glob";
 
 async function createServer() {
-  const app = express();
-  app.use(express.static("./site/static"));
+  const app = polka();
 
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-  });
-  app.use(vite.middlewares);
+  // static files
+  app.use(sirv("./site/static"));
+
+  // site api
   const files = await glob("./site/routes/**/api.js");
   for (const path of files) {
     let route =
@@ -29,15 +29,20 @@ async function createServer() {
     }
 
     const script = resolve(process.cwd(), path);
+    console.log(route);
     app.get(route, async (req, res) => {
       const handler = await import(script).then((m) => m.get);
       handler(req, res);
     });
   }
 
-  app.use("*", async (req, res) => {
-    const url = req.originalUrl;
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+  });
+  app.use(vite.middlewares);
 
+  app.get("/*", async (req, res) => {
+    const url = req.originalUrl;
     try {
       let template = fs.readFileSync("./site/index.html", "utf-8");
       template = await vite.transformIndexHtml(url, template);
@@ -63,15 +68,19 @@ async function createServer() {
       );
       html = html.replace(`<!-- @APP@ -->`, app);
 
-      res.status(200).set({ "Content-Type": "text/html" }).end(html);
+      res.writeHead(200, { "Content-Type": "text/html" });
+      res.end(html);
     } catch (e) {
       vite.ssrFixStacktrace(e);
       console.error(e);
-      res.status(500).end(e.message);
+      res.statusCode = 500;
+      res.end(e.message);
     }
   });
 
-  app.listen(3000);
+  app.listen(3000, () => {
+    console.log("> Running on localhost:3000");
+  });
 }
 
 createServer();
