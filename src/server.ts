@@ -1,9 +1,9 @@
 import fs from "fs";
-import polka from "polka";
 import sirv from "sirv";
+import polka from "polka";
+import glob from "fast-glob";
 import { resolve } from "path";
 import { createServer as createViteServer } from "vite";
-import glob from "fast-glob";
 
 async function createServer() {
   const app = polka();
@@ -29,7 +29,6 @@ async function createServer() {
     }
 
     const script = resolve(process.cwd(), path);
-    console.log(route);
     app.get(route, async (req, res) => {
       const handler = await import(script).then((m) => m.get);
       handler(req, res);
@@ -55,16 +54,10 @@ async function createServer() {
 
       let html = template.replace(
         "<!-- @HEAD@ -->",
-        `
-        ${head}
-        <script>window.__PRELOAD_DATA__ = ${
-          data
-            ? data instanceof Error
-              ? `new Error(${data.message})`
-              : JSON.stringify(data)
-            : "{}"
-        };</script>
-      `.trim()
+        head +
+          `<script>window.__PRELOAD_DATA__ = ${JSON.stringify(
+            data || {}
+          )};</script>`.trim()
       );
       html = html.replace(`<!-- @APP@ -->`, app);
 

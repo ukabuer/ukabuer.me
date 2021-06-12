@@ -6,18 +6,26 @@ import Header from "../site/components/Header";
 import AppContext from "./context";
 import Footer from "../site/components/Footer";
 import site from "../site/data";
+import ErrorPage from "../site/error";
 import "../site/style.scss";
+
+function isError(data: unknown): data is { error: "string" } {
+  return (
+    data instanceof Object &&
+    Object.prototype.hasOwnProperty.call(data, "error")
+  );
+}
 
 type Props = {
   pages: Array<AsyncPageType>;
   initial?: unknown;
 };
 
-const App: FunctionComponent<Props> = ({ pages, initial }) => {
+const App: FunctionComponent<Props> = ({ pages, initial = {} }) => {
   const { matcher } = useRouter();
   const [currentLocation] = useLocation();
   const [renderLocation, setRenderLocation] = useState(currentLocation);
-  const [page, setPage] = useState<unknown>(initial);
+  const [page, setPage] = useState(initial);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -54,8 +62,7 @@ const App: FunctionComponent<Props> = ({ pages, initial }) => {
   }, [currentLocation, matcher, pages]);
 
   const errorRoute = "/error";
-  const errorPage = pages.find((page) => page.route == errorRoute);
-  const location = page instanceof Error ? errorRoute : renderLocation;
+  const location = isError(page) ? errorRoute : renderLocation;
   return (
     <div id="app">
       <AppContext.Provider
@@ -72,7 +79,7 @@ const App: FunctionComponent<Props> = ({ pages, initial }) => {
             .map((page) => {
               return <Route path={page.route} component={page} />;
             })
-            .concat(errorPage ? [<Route component={errorPage} />] : [])}
+            .concat([<Route component={ErrorPage} />])}
         </Switch>
         <Footer />
       </AppContext.Provider>

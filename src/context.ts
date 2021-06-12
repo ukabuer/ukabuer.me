@@ -4,7 +4,7 @@ import site from '../site/data'
 
 const AppContext = createContext<{
   site: typeof site;
-  page: Error | unknown;
+  page: unknown;
   location: string;
   loading: boolean;
 }>({ site, page: {}, location: "", loading: false });

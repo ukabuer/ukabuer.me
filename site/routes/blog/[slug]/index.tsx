@@ -30,13 +30,13 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
 };
 
 export async function preload(fetch: any, params: any) {
-  const res = await fetch(`/api/blog/${params.slug}/`);
-  const data = await res.json();
-  if (data.error) {
-    throw new Error(data.error);
+  try {
+    const res = await fetch(`/api/blog/${params.slug}/`);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return { error: 'Not Found'}
   }
-
-  return data;
 }
 
 export default ArticlePage;

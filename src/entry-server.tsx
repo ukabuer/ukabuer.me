@@ -23,12 +23,12 @@ export async function renderToHtml(url: string) {
 
   const page = pages.find((page) => page.Match(url)[0]);
 
-  let data: Error | unknown = new Error("Not Found");
+  let data: unknown = { error: "Not Found" };
   if (page) {
     try {
       data = await page.Load(page.Match(url)[1]);
     } catch (err) {
-      data = err;
+      data = { error: err.message };
     }
   }
   const app = renderToString(

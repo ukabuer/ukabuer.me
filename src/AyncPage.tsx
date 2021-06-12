@@ -8,7 +8,10 @@ export function createAsyncPage<Props>(
   loader: () => Promise<Module<ComponentType<Props>>>,
   fetch: typeof window.fetch
 ) {
-  let route = file.replace("index.tsx", "").replace("../site/routes", "");
+  let route = file
+    .replace(".tsx", "")
+    .replace(/\/index$/, "/")
+    .replace("../site/routes", "");
   const matches = route.match(/\[(\w+)\]/g);
   if (matches && matches.length > 0) {
     for (const match of matches) {

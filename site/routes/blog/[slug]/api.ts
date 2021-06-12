@@ -8,10 +8,13 @@ export async function get(req: any, res: any) {
   pages.forEach((page: any) => {
     lookup.set(page.slug, page.path);
   });
+
   if (!lookup.has(slug)) {
-    res.json({
-      error: `Not found`,
-    });
+    res.end(
+      JSON.stringify({
+        error: `Not found`,
+      })
+    );
     return;
   }
 

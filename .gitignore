@@ -2,5 +2,6 @@ node_modules
 dist
 .vscode
 site/**/*.js
+!site/static/*.js
 src/*.js
 *.map
