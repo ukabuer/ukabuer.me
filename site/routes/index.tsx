@@ -1,6 +1,8 @@
 import { FunctionComponent } from "preact";
+import { useCallback, useEffect, useRef } from "preact/hooks";
 import Head from "../../src/Head";
 import site from "../data";
+import draw from "../utils/triangle";
 import "./style.scss";
 
 type Props = {
@@ -12,17 +14,54 @@ type Props = {
       thumbnail: string;
       description: string;
     }>;
-  }
-}
+  };
+};
 
 const IndexPage: FunctionComponent<Props> = ({ page }) => {
+  const canvasEl = useRef<HTMLCanvasElement>(null);
+  const drawBanner = useCallback(() => {
+    const canvas = canvasEl.current;
+    if (!canvas) return;
+
+    const gap = 60;
+    const colors = [
+      "#b2ddd4",
+      "#a9d8d0",
+      "#a4d6cd",
+      "#a2d4c9",
+      "#91cdcb",
+      "#84c8c9",
+      "#7ec5c9",
+      "#5ab5ca",
+      "#53b1ca",
+      "#58b4c9",
+      "#4396c8",
+      "#3a85c9",
+    ];
+    const ctx = canvas.getContext("2d");
+    canvas.width = document.body.clientWidth;
+    canvas.height = 200;
+
+    if (!ctx) return;
+
+    draw(ctx, colors, gap);
+  }, []);
+
+  useEffect(() => {
+    drawBanner();
+    window.addEventListener("resize", drawBanner);
+    return () => {
+      window.removeEventListener("resize", drawBanner);
+    };
+  }, [drawBanner]);
+
   return (
     <div className="page home">
       <Head>
         <title>{page.title}</title>
       </Head>
       <div class="banner">
-        <canvas />
+        <canvas ref={canvasEl} />
       </div>
       <div class="profile card">
         <div>
@@ -61,11 +100,10 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
           {page.projects.map((item) => (
             <div class="project">
               <div class="card">
-                <div class="card-thumbnail">
-                  <a href={item.link} target="_blank">
-                    <img src={item.thumbnail} alt="" />
-                  </a>
-                </div>
+                <div
+                  class="card-thumbnail"
+                  style={{ backgroundImage: `url(${item.thumbnail})` }}
+                ></div>
 
                 <div class="card-intro">
                   <div>

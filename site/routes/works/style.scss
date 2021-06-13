@@ -1,3 +1,5 @@
+@import "../../components/variables.scss";
+
 .page.works {
   .banner {
     background-color: #009688;
@@ -43,18 +45,18 @@
 
   .work-item.image {
     max-width: 33.33333333%;
-    @media (--middle-viewport) {
+    @media (max-width: $lg-break) {
       max-width: 50%;
     }
-    @media (--small-viewport) {
+    @media (max-width: $md-break) {
       max-width: 100%;
     }
   }
 
   .work-item.text {
-    max-width: 50%;
-    @media (--small-viewport) {
-      max-width: 100%;
+    width: 50%;
+    @media (max-width: $md-break) {
+      width: 100%;
     }
   }
 }
