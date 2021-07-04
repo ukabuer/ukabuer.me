@@ -5,7 +5,7 @@ import glob from "fast-glob";
 import { resolve } from "path";
 import { createServer as createViteServer } from "vite";
 
-async function createServer() {
+async function createServer(prerender = false) {
   const app = polka();
 
   // static files
@@ -63,6 +63,16 @@ async function createServer() {
 
       res.writeHead(200, { "Content-Type": "text/html" });
       res.end(html);
+
+      if (prerender) {
+        const dir = `exports${url}`;
+        const exists = fs.existsSync(dir);
+        if (!exists) {
+          fs.mkdirSync(dir);
+        }
+        const file = `${dir}index.html`;
+        fs.writeFileSync(file, html);
+      }
     } catch (e) {
       vite.ssrFixStacktrace(e);
       console.error(e);
@@ -76,4 +86,4 @@ async function createServer() {
   });
 }
 
-createServer();
+export default createServer;
