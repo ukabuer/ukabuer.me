@@ -3,17 +3,17 @@ export default {
   author: {
     name: "ukabuer",
     link: "https://ukabuer.me",
-    avatar: "/img/ed.jpg",
+    avatar: "/static/img/ed.jpg",
     social: [
       {
         name: "Twitter",
         link: "https://twitter.com/ukabuer/",
-        icon: "/img/svg/twitter.svg",
+        icon: "/static/img/svg/twitter.svg",
       },
       {
         name: "Github",
         link: "https://github.com/ukabuer",
-        icon: "/img/svg/github.svg",
+        icon: "/static/img/svg/github.svg",
       },
       {
         name: "Observable",

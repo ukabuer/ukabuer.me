@@ -9,7 +9,7 @@ async function createServer(prerender = false) {
   const app = polka();
 
   // static files
-  app.use(sirv("./site/static"));
+  app.use("/static", sirv("./site/static"));
 
   // site api
   const files = await glob("./site/routes/**/api.js");
@@ -18,7 +18,7 @@ async function createServer(prerender = false) {
       "/api" +
       path
         .replace("./site/routes", "")
-        .replace("api.js", "")
+        .replace("api.js", "index.json")
         .replace(/\\/g, "/");
     const matches = route.match(/\[(\w+)\]/g);
     if (matches && matches.length > 0) {
@@ -30,8 +30,28 @@ async function createServer(prerender = false) {
 
     const script = resolve(process.cwd(), path);
     app.get(route, async (req, res) => {
+      const originEnd = res.end.bind(res);
+      let saved = "";
+      res.end = (data: any) => {
+        if (prerender) {
+          saved = data;
+        }
+        originEnd(data);
+      };
       const handler = await import(script).then((m) => m.get);
-      handler(req, res);
+      await handler(req, res);
+
+      if (prerender) {
+        const url = req.originalUrl;
+        const file = `exports${url}`;
+        const dir = file.replace("index.json", "");
+        const exists = fs.existsSync(dir);
+        if (!exists) {
+          fs.mkdirSync(dir);
+        }
+        fs.writeFileSync(file, saved);
+      }
+      res.end = originEnd;
     });
   }
 
@@ -43,9 +63,11 @@ async function createServer(prerender = false) {
   app.get("/*", async (req, res) => {
     const url = req.originalUrl;
     try {
-      let template = fs.readFileSync("./site/index.html", "utf-8");
+      // const template = fs.readFileSync("./dist/client/index.html", "utf-8");
+      let template = fs.readFileSync("site/index.html", "utf-8");
       template = await vite.transformIndexHtml(url, template);
 
+      // const { renderToHtml } = require("../dist/server/entry-server.js"); // eslint-disable-line
       const { renderToHtml } = await vite.ssrLoadModule(
         "./src/entry-server.tsx"
       );

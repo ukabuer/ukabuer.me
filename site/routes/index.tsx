@@ -125,7 +125,7 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
 };
 
 export async function preload(fetch: any) {
-  const res = await fetch("/api/");
+  const res = await fetch("/api/index.json");
   return res.json();
 }
 

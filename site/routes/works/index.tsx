@@ -90,7 +90,7 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
 };
 
 export async function preload(fetch: any) {
-  const res = await fetch('/api/works/');
+  const res = await fetch('/api/works/index.json');
   return res.json();
 }
 

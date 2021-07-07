@@ -29,7 +29,7 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
 };
 
 export async function preload(fetch: any): Promise<PageData> {
-  return fetch("/api/about/").then((res: any) => res.json());
+  return fetch("/api/about/index.json").then((res: any) => res.json());
 }
 
 export default AboutPage;
