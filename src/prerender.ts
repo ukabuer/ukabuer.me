@@ -2,6 +2,9 @@ import glob from "fast-glob";
 import fetch from "isomorphic-unfetch";
 import { isMainThread, Worker, parentPort } from "worker_threads";
 import createServer from "./server";
+import * as vite from "vite";
+import { resolve } from "path";
+import fs from "fs";
 
 export async function prerender() {
   const pages = await glob("site/routes/**/*.tsx");
@@ -25,7 +28,6 @@ export async function prerender() {
 
     // request url & get response
     const target = `http://localhost:3000${url}`;
-    console.log(target);
     const response = await fetch(target);
     if (response.status != 200) {
       continue;
@@ -44,16 +46,57 @@ export async function prerender() {
 }
 
 async function startServerAndPrerender() {
-  await createServer(true);
+  await vite.build({
+    configFile: false,
+    root: resolve(__dirname, "../site"),
+    esbuild: {
+      jsxFactory: "h",
+      jsxFragment: "Fragment",
+      jsxInject: `import { h, Fragment } from 'preact'`,
+    },
+    build: {
+      emptyOutDir: true,
+      ssr: resolve(__dirname, "./entry-server.tsx"),
+      ssrManifest: true,
+      outDir: "./dist/server",
+      manifest: true,
+    },
+  });
+
+  await vite.build({
+    configFile: false,
+    root: resolve(__dirname, "../site"),
+    esbuild: {
+      jsxFactory: "h",
+      jsxFragment: "Fragment",
+      jsxInject: `import { h, Fragment } from 'preact'`,
+    },
+    build: {
+      emptyOutDir: false,
+      outDir: "./dist",
+      manifest: true,
+    },
+  });
+
+  fs.copyFileSync(
+    resolve(__dirname, "../site/dist/index.html"),
+    resolve(__dirname, "../site/dist/server/template.html")
+  );
+
+  fs.rmSync(resolve(__dirname, "../site/dist/index.html"));
+
+  const app = await createServer(true);
   const worker = new Worker(__filename);
   worker.on("error", (err) => {
     console.error(err.message);
   });
-  worker.on('message', () => {
-    process.exit();
+  worker.on("message", () => {
+    console.log("prerendered!");
+    fs.rmSync(resolve(__dirname, "../site/dist/server/"), { recursive: true });
+    app.server.close();
   });
   worker.on("exit", () => {
-    console.log("worker exit");
+    process.exit();
   });
 }
 

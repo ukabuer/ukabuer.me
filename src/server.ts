@@ -43,7 +43,7 @@ async function createServer(prerender = false) {
 
       if (prerender) {
         const url = req.originalUrl;
-        const file = `exports${url}`;
+        const file = `site/dist${url}`;
         const dir = file.replace("index.json", "");
         const exists = fs.existsSync(dir);
         if (!exists) {
@@ -56,21 +56,23 @@ async function createServer(prerender = false) {
   }
 
   const vite = await createViteServer({
-    server: { middlewareMode: true },
+    server: { middlewareMode: true, hmr: !prerender },
   });
   app.use(vite.middlewares);
 
   app.get("/*", async (req, res) => {
     const url = req.originalUrl;
     try {
-      // const template = fs.readFileSync("./dist/client/index.html", "utf-8");
-      let template = fs.readFileSync("site/index.html", "utf-8");
-      template = await vite.transformIndexHtml(url, template);
+      let template = prerender
+        ? fs.readFileSync("./site/dist/server/template.html", "utf-8")
+        : fs.readFileSync("site/index.html", "utf-8");
+      if (!prerender) {
+        template = await vite.transformIndexHtml(url, template);
+      }
 
-      // const { renderToHtml } = require("../dist/server/entry-server.js"); // eslint-disable-line
-      const { renderToHtml } = await vite.ssrLoadModule(
-        "./src/entry-server.tsx"
-      );
+      const { renderToHtml } = prerender
+        ? require("../site/dist/server/entry-server.js")
+        : await vite.ssrLoadModule("./src/entry-server.tsx");
 
       const [data, head, app] = await renderToHtml(url);
 
@@ -87,7 +89,7 @@ async function createServer(prerender = false) {
       res.end(html);
 
       if (prerender) {
-        const dir = `exports${url}`;
+        const dir = `site/dist${url}`;
         const exists = fs.existsSync(dir);
         if (!exists) {
           fs.mkdirSync(dir);
@@ -103,9 +105,12 @@ async function createServer(prerender = false) {
     }
   });
 
-  app.listen(3000, () => {
-    console.log("> Running on localhost:3000");
-  });
+  return new Promise<typeof app>((resolve) => {
+    app.listen(3000, () => {
+      console.log("> Running on localhost:3000");
+      resolve(app);
+    })
+  })
 }
 
 export default createServer;
