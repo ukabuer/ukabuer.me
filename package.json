@@ -8,7 +8,7 @@
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.tsx",
     "watch:server": "tsc -w -p src/tsconfig.server.json",
-    "start": "node src/serve",
+    "dev": "node src/serve",
     "prerender": "node src/prerender",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

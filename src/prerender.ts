@@ -92,7 +92,7 @@ async function startServerAndPrerender() {
   });
   worker.on("message", () => {
     console.log("prerendered!");
-    fs.rmSync(resolve(__dirname, "../site/dist/server/"), { recursive: true });
+    fs.rmdirSync(resolve(__dirname, "../site/dist/server/"), { recursive: true });
     app.server.close();
   });
   worker.on("exit", () => {

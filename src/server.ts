@@ -3,6 +3,7 @@ import sirv from "sirv";
 import polka from "polka";
 import glob from "fast-glob";
 import { resolve } from "path";
+import prefresh from "@prefresh/vite";
 import { createServer as createViteServer } from "vite";
 
 async function createServer(prerender = false) {
@@ -56,7 +57,20 @@ async function createServer(prerender = false) {
   }
 
   const vite = await createViteServer({
-    server: { middlewareMode: true, hmr: !prerender },
+    configFile: false,
+    plugins: prerender ? [] : [prefresh()],
+    esbuild: {
+      jsxFactory: "h",
+      jsxFragment: "Fragment",
+      jsxInject: `import { h, Fragment } from 'preact'`,
+    },
+    build: {
+      sourcemap: true,
+      manifest: true,
+    },
+    server: {
+      middlewareMode: true, hmr: !prerender
+    },
   });
   app.use(vite.middlewares);
 
