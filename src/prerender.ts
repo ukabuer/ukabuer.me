@@ -6,6 +6,21 @@ import * as vite from "vite";
 import { resolve } from "path";
 import fs from "fs";
 
+// from https://github.com/sveltejs/kit/blob/master/packages/kit/src/core/adapt/prerender.js
+function clean_html(html: string) {
+  return html
+    .replace(/<!\[CDATA\[[\s\S]*?\]\]>/gm, "")
+    .replace(/(<script[\s\S]*?>)[\s\S]*?<\/script>/gm, "$1</" + "script>")
+    .replace(/(<style[\s\S]*?>)[\s\S]*?<\/style>/gm, "$1</" + "style>")
+    .replace(/<!--[\s\S]*?-->/gm, "");
+}
+
+function get_href(attrs: string) {
+  const match =
+    /(?:[\s'"]|^)href\s*=\s*(?:"(\/.*?)"|'(\/.*?)'|(\/[^\s>]*))/.exec(attrs);
+  return match && (match[1] || match[2] || match[3]);
+}
+
 export async function prerender() {
   const pages = await glob("site/routes/**/*.tsx");
   const apis = await glob("site/routes/**/.ts");
@@ -33,12 +48,29 @@ export async function prerender() {
       continue;
     }
 
-    const text = await response.text();
-
     // save to file
     const type = response.headers.get("Content-Type") || "";
     if (type.match("text/html")) {
       // parse to find more url
+      const text = await response.text();
+
+      const cleaned = clean_html(text);
+
+      let match;
+      const pattern = /<(a|link|)\s+([\s\S]+?)>/gm;
+
+      while ((match = pattern.exec(cleaned))) {
+        const attrs = match[2];
+        const href = get_href(attrs);
+        if (
+          href &&
+          !href.startsWith("/assets/") &&
+          !href.startsWith("/static/")
+        ) {
+          const url = new URL(href, "http://localhost:3000/");
+          unresolved.push(url.pathname);
+        }
+      }
     }
 
     resolved.add(url);
@@ -92,7 +124,9 @@ async function startServerAndPrerender() {
   });
   worker.on("message", () => {
     console.log("prerendered!");
-    fs.rmdirSync(resolve(__dirname, "../site/dist/server/"), { recursive: true });
+    fs.rmdirSync(resolve(__dirname, "../site/dist/server/"), {
+      recursive: true,
+    });
     app.server.close();
   });
   worker.on("exit", () => {
