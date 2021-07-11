@@ -37,7 +37,7 @@ export async function get(req: any, res: any) {
     });
 
   res.writeHead(200, {
-    "Content-Type": "text/xml",
+    "Content-Type": "application/json",
   });
-  res.end(feed.rss2());
+  res.end(feed.json1());
 }

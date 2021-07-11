@@ -45,7 +45,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
     <div className="page article">
       <Head>
         <title>{page.title}</title>
-        <link rel="stylesheet" href="/prism.css" />
+        <link rel="stylesheet" href="/static/prism.css" />
       </Head>
       <div class="banner">
         <div>
@@ -92,7 +92,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
             async
           ></script>
         </div>
-        <script src="/prism.js" async />
+        <script src="/static/prism.js" async />
       </div>
     </div>
   );
