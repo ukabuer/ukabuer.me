@@ -78,11 +78,9 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
                     href={social.link}
                     title={social.name}
                     target="_blank"
-                    class="icon-svg"
                   >
-                    <img src={social.icon} alt="" />
+                    {social.name}
                   </a>
-                  <span>&nbsp;</span>
                 </>
               ))}
             </div>

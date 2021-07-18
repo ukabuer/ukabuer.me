@@ -4,7 +4,7 @@ import { isMainThread, Worker, parentPort } from "worker_threads";
 import createServer from "./server";
 import * as vite from "vite";
 import { resolve } from "path";
-import fs from "fs";
+import fs from "fs-extra";
 
 // from https://github.com/sveltejs/kit/blob/master/packages/kit/src/core/adapt/prerender.js
 function clean_html(html: string) {
@@ -138,6 +138,9 @@ if (isMainThread) {
   startServerAndPrerender();
 } else {
   prerender().then(() => {
+    fs.copySync("site/static", "site/dist/static", {
+      overwrite: true,
+    });
     parentPort?.postMessage(null);
   });
 }

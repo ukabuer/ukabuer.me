@@ -11,7 +11,7 @@ export type Article = {
 }
 
 export async function get(req: any, res: any) {
-  const page = await (await fetch(`${process.env.API}/blog`)).json();
+  const page = await (await fetch(`${API}/blog`)).json();
   const request = await fetch(`${API}/articles`);
   const posts = await request.json() as Article[];
 

@@ -69,7 +69,12 @@ async function createServer(prerender = false) {
       manifest: true,
     },
     server: {
-      middlewareMode: true, hmr: !prerender
+      middlewareMode: true,
+      hmr: !prerender,
+      fs: {
+        strict: true,
+        allow: ["../src"],
+      },
     },
   });
   app.use(vite.middlewares);
@@ -123,8 +128,8 @@ async function createServer(prerender = false) {
     app.listen(3000, () => {
       console.log("> Running on localhost:3000");
       resolve(app);
-    })
-  })
+    });
+  });
 }
 
 export default createServer;

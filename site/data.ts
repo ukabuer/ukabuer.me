@@ -3,7 +3,7 @@ export default {
   author: {
     name: "ukabuer",
     link: "https://ukabuer.me",
-    avatar: "/static/img/ed.jpg",
+    avatar: "/static/ed.jpg",
     social: [
       {
         name: "Twitter",
@@ -15,13 +15,8 @@ export default {
         link: "https://github.com/ukabuer",
         icon: "/static/img/svg/github.svg",
       },
-      {
-        name: "Observable",
-        link: "https://observablehq.com/@ukabuer",
-        icon: "/img/svg/observable.svg",
-      },
     ],
     introduce: "人形自走复读机。",
-    identities: ["学生", "程序员", "宅"],
+    identities: ["社畜", "程序员", "宅"],
   },
 }

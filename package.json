@@ -5,8 +5,7 @@
   "main": "src/server.js",
   "private": true,
   "scripts": {
-    "build:client": "vite build --outDir dist/client --ssrManifest",
-    "build:server": "vite build --outDir dist/server --ssr src/entry-server.tsx",
+    "build:server": "tsc -p src/tsconfig.server.json",
     "watch:server": "tsc -w -p src/tsconfig.server.json",
     "dev": "node src/serve",
     "prerender": "node src/prerender",
@@ -16,10 +15,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/fs-extra": "^9.0.12",
     "fast-glob": "^3.2.5",
     "feed": "^4.2.2",
+    "fs-extra": "^10.0.0",
     "isomorphic-unfetch": "^3.1.0",
-    "js-yaml": "^4.1.0",
     "marked": "^2.0.6",
     "polka": "^1.0.0-next.15",
     "preact": "^10.5.13",
@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "@prefresh/vite": "^2.2.2",
-    "@types/js-yaml": "^4.0.1",
     "@types/marked": "^2.0.3",
     "@types/node": "^15.0.1",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
