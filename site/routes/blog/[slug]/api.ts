@@ -1,15 +1,15 @@
-import { getData, getPagesInDir, formatDate } from "../../../utils";
+import { formatDate } from "../../../utils";
+import fetch from 'isomorphic-unfetch';
+import { Article } from "../api";
+import marked from "marked";
+import { API } from "../../api";
 
 export async function get(req: any, res: any) {
   const { slug } = req.params;
+  const request = await fetch(`${API}/articles?slug=${slug}`);
+  const posts = await request.json() as Article[];
 
-  const lookup = new Map();
-  const pages = await getPagesInDir("blog");
-  pages.forEach((page: any) => {
-    lookup.set(page.slug, page.path);
-  });
-
-  if (!lookup.has(slug)) {
+  if (posts.length < 1) {
     res.end(
       JSON.stringify({
         error: `Not found`,
@@ -18,8 +18,12 @@ export async function get(req: any, res: any) {
     return;
   }
 
-  const page: any = await getData(lookup.get(slug));
-  page.date = formatDate(page.date);
+  const post = posts[0];
+  const article = {
+    ...post,
+    date: formatDate(new Date(post.date)),
+    content: marked(post.content)
+  }
 
-  res.end(JSON.stringify(page));
+  res.end(JSON.stringify(article));
 }

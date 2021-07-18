@@ -1,7 +1,10 @@
-import { getData } from "../utils";
+import fetch from 'isomorphic-unfetch';
+
+export const API = process.env.API || '';
 
 export async function get(req: any, res: any) {
-  const page = await getData("index.md");
+  const request = await fetch(`${process.env.API}/home`);
+  const page = await request.json();
 
   res.end(JSON.stringify(page));
 }

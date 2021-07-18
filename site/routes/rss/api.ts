@@ -1,7 +1,7 @@
 import { Feed } from "feed";
-import { getData, getPagesInDir } from "../../utils";
-
-const dev = process.env.NODE_ENV === "development";
+import fetch from "isomorphic-unfetch";
+import { API } from "../api";
+import { Article } from "../blog/api";
 
 export async function get(req: any, res: any) {
   const feed = new Feed({
@@ -13,26 +13,20 @@ export async function get(req: any, res: any) {
     copyright: `All rights reserved 2014-${new Date().getFullYear()}, ukabuer`,
   });
 
-  const files = await getPagesInDir("blog");
-  const tasks = files.map(async (file) => {
-    if (!file) return null;
-    const page = await getData(file.path);
-    return { ...page, slug: file.slug } as any;
-  });
-  const posts = await (await Promise.all(tasks)).filter((v) => v != null);
+  const request = await fetch(`${API}/articles`);
+  const posts = (await request.json()) as Article[];
 
   posts
-    .filter((post) => dev || !post.draft)
     .sort((a, b) => {
-      return b.date.getTime() - a.date.getTime();
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     })
     .forEach((item) => {
       feed.addItem({
         title: item.title,
         id: "https://ukabuer.me/blog/" + item.slug,
         link: "https://ukabuer.me/blog/" + item.slug,
-        description: item.content.substr(0, 200),
-        date: item.date,
+        description: item.external ? item.title : item.content.substr(0, 200),
+        date: new Date(item.date),
       });
     });
 

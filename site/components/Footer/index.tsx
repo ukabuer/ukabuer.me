@@ -16,13 +16,10 @@ const Footer: FunctionComponent = () => {
         <Link href={site.author.link}>{site.author.name}</Link>
       </p>
       <p>
-        <span>Built with &#129505;, </span>
+        <span>Built with &#129505;</span>
+        <span> and </span>
         <a href="https://preactjs.com" target="_blank">
           preact
-        </a>
-        <span> and </span>
-        <a href="https://vitejs.dev/" target="_blank">
-          vite
         </a>
       </p>
     </footer>

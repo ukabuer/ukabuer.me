@@ -1,32 +1,34 @@
-import { getData, getPagesInDir, formatDate } from "../../utils";
+import { formatDate } from "../../utils";
+import fetch from 'isomorphic-unfetch';
+import { API } from "../api";
 
-const dev = process.env.NODE_ENV === "development";
+export type Article = {
+  title: string;
+  slug: string;
+  content: string;
+  external: string;
+  date: string;
+}
 
 export async function get(req: any, res: any) {
-  const data = await getData("blog/index.md");
-
-  const files = await getPagesInDir("blog");
-  const tasks = files.map(async (file) => {
-    if (!file) return null;
-    const page = await getData(file.path);
-    return { ...page, slug: file.slug } as any;
-  });
-  const posts = await (await Promise.all(tasks)).filter((v) => v != null);
+  const page = await (await fetch(`${process.env.API}/blog`)).json();
+  const request = await fetch(`${API}/articles`);
+  const posts = await request.json() as Article[];
 
   const sorted = posts
-    .filter((post) => dev || !post.draft)
     .sort((a, b) => {
-      return b.date.getTime() - a.date.getTime();
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     })
-    .map((item) => {
-      item.date = formatDate(item.date);
-      delete item.content;
-      return item;
-    });
+    .map((item) => ({
+      title: item.title,
+      slug: item.slug,
+      external: item.external,
+      date: formatDate(new Date(item.date)),
+    }));
 
   res.end(
     JSON.stringify({
-      ...data,
+      ...page,
       posts: sorted,
     })
   );
