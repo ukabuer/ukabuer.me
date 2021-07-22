@@ -10,7 +10,7 @@ async function createServer(prerender = false) {
   const app = polka();
 
   // static files
-  app.use("/static", sirv("./site/static"));
+  app.use(sirv("./site/public"));
 
   // site api
   const files = await glob("./site/routes/**/api.js");
@@ -58,6 +58,7 @@ async function createServer(prerender = false) {
 
   const vite = await createViteServer({
     configFile: false,
+    root: resolve(__dirname, ".."),
     plugins: prerender ? [] : [prefresh()],
     esbuild: {
       jsxFactory: "h",
@@ -73,7 +74,6 @@ async function createServer(prerender = false) {
       hmr: !prerender,
       fs: {
         strict: true,
-        allow: ["../src"],
       },
     },
   });

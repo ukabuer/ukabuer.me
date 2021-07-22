@@ -2,7 +2,7 @@ node_modules
 dist
 .vscode
 site/**/*.js
-!site/static/*.js
+!site/public/**/*.js
 src/*.js
 *.map
 exports

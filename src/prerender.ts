@@ -138,7 +138,7 @@ if (isMainThread) {
   startServerAndPrerender();
 } else {
   prerender().then(() => {
-    fs.copySync("site/static", "site/dist/static", {
+    fs.copySync("site/public/", "site/dist/", {
       overwrite: true,
     });
     parentPort?.postMessage(null);
