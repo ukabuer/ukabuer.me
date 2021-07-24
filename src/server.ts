@@ -5,6 +5,7 @@ import glob from "fast-glob";
 import { resolve } from "path";
 import prefresh from "@prefresh/vite";
 import { createServer as createViteServer } from "vite";
+import watchAPI from "./api-watcher";
 
 async function createServer(prerender = false) {
   const app = polka();
@@ -13,13 +14,14 @@ async function createServer(prerender = false) {
   app.use(sirv("./site/public"));
 
   // site api
-  const files = await glob("./site/routes/**/api.js");
+  const files = await glob("./site/routes/**/api.ts");
+  watchAPI(files);
   for (const path of files) {
     let route =
       "/api" +
       path
         .replace("./site/routes", "")
-        .replace("api.js", "index.json")
+        .replace("api.ts", "index.json")
         .replace(/\\/g, "/");
     const matches = route.match(/\[(\w+)\]/g);
     if (matches && matches.length > 0) {
@@ -29,7 +31,7 @@ async function createServer(prerender = false) {
       }
     }
 
-    const script = resolve(process.cwd(), path);
+    const script = resolve("node_modules/.tmp", path.replace(".ts", ".js"));
     app.get(route, async (req, res) => {
       const originEnd = res.end.bind(res);
       let saved = "";
