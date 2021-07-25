@@ -1,8 +1,8 @@
 import { hydrate } from "preact";
-import { createAsyncPage } from "./AyncPage";
-import App from "./app";
 import fetch from "isomorphic-unfetch";
 import { Router } from "wouter-preact";
+import { createAsyncPage } from "./AyncPage";
+import App from "../site/app";
 
 const items = import.meta.glob("../site/routes/**/*.tsx");
 const pages = Object.entries(items).map(([file, loader]) => {

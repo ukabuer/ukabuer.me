@@ -31,7 +31,7 @@ async function createServer(prerender = false) {
       }
     }
 
-    const script = resolve("node_modules/.tmp", path.replace(".ts", ".js"));
+    const script = resolve("./site/dist/.tmp", path.replace(".ts", ".js"));
     app.get(route, async (req, res) => {
       const originEnd = res.end.bind(res);
       let saved = "";
@@ -60,7 +60,7 @@ async function createServer(prerender = false) {
 
   const vite = await createViteServer({
     configFile: false,
-    root: resolve(__dirname, ".."),
+    root: resolve(__dirname, "../site"),
     plugins: prerender ? [] : [prefresh()],
     esbuild: {
       jsxFactory: "h",
@@ -87,13 +87,17 @@ async function createServer(prerender = false) {
       let template = prerender
         ? fs.readFileSync("./site/dist/server/template.html", "utf-8")
         : fs.readFileSync("site/index.html", "utf-8");
+      template = template.replace(
+        "<!-- @APP@ -->",
+        `<!-- @APP@ --><script type="module" src="/dist/.tmp/entry-client.tsx"></script>`
+      );
       if (!prerender) {
         template = await vite.transformIndexHtml(url, template);
       }
 
       const { renderToHtml } = prerender
-        ? require("../site/dist/server/entry-server.js")
-        : await vite.ssrLoadModule("./src/entry-server.tsx");
+        ? require(resolve(process.cwd(), "./site/dist/server/entry-server.js"))
+        : await vite.ssrLoadModule("./site/dist/.tmp/entry-server.tsx");
 
       const [data, head, app] = await renderToHtml(url);
 

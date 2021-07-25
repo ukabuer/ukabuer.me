@@ -2,9 +2,9 @@ import { Router } from "wouter-preact";
 import fetch from "isomorphic-unfetch";
 import renderToString from "preact-render-to-string";
 import staticLocationHook from "../node_modules/wouter-preact/static-location";
-import App from "./app";
 import Head from "./Head";
 import { createAsyncPage } from "./AyncPage";
+import App from "../site/app";
 
 const items = import.meta.globEager("../site/routes/**/*.tsx");
 const pages = Object.entries(items).map(([file, module]) => {

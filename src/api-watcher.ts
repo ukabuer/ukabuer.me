@@ -33,7 +33,7 @@ export default function watchAPI(files: string[]) {
       module: ts.ModuleKind.CommonJS,
       sourceMap: true,
       esModuleInterop: true,
-      outDir: resolve(process.cwd(), "node_modules/.my-tmp"),
+      outDir: resolve(process.cwd(), "./site/dist/.tmp"),
       rootDir: process.cwd(),
       skipLibCheck: true
     },

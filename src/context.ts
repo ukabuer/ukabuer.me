@@ -1,13 +1,12 @@
 import { createContext } from "preact";
 import { useContext } from "preact/hooks";
-import site from '../site/data'
 
 const AppContext = createContext<{
-  site: typeof site;
+  site: any;
   page: unknown;
   location: string;
   loading: boolean;
-}>({ site, page: {}, location: "", loading: false });
+}>({ site: {}, page: {}, location: "", loading: false });
 
 export default AppContext;
 
