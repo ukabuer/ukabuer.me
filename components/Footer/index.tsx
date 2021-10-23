@@ -19,8 +19,8 @@ const Footer: FunctionComponent = () => {
       <p>
         <span>Built with &#129505;</span>
         <span> and </span>
-        <a href="https://preactjs.com" target="_blank">
-          preact
+        <a href="https://github.com/ukabuer/muggle" target="_blank">
+          muggle
         </a>
       </p>
     </footer>
