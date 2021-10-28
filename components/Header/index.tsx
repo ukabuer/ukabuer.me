@@ -1,17 +1,15 @@
 import { FunctionComponent } from "preact";
-import { useRouter } from "wouter-preact";
 import { useAppContext, Link } from "muggle/client";
 import Loading from "../Loading";
 import "./style.scss";
 
 const Header: FunctionComponent = () => {
-  const { matcher } = useRouter();
   const { location, loading } = useAppContext();
-  const [isHome] = matcher("/", location);
-  const [isWorksPage] = matcher("/works/", location);
-  const [isBlogPage] = matcher("/blog/", location);
-  const [isArticlePage] = matcher("/blog/:id", location);
-  const [isAboutPage] = matcher("/about/", location);
+  const isHome = "/" === location;
+  const isWorksPage = "/works/" === location;
+  const isBlogPage = "/blog/" === location;
+  const isArticlePage = location.indexOf("/blog/") !== -1;
+  const isAboutPage = "/about/" === location;
 
   return (
     <header class={isHome ? "home" : undefined}>

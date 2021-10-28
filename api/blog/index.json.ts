@@ -1,4 +1,4 @@
-import { formatDate } from "../../utils/index.js";
+import { formatDate } from "../../components/utils/index.js";
 import fetch from "isomorphic-unfetch";
 import { API } from "../index.json.js";
 
