@@ -2,8 +2,8 @@ import { FunctionComponent } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
 import { Head } from "muggle/client";
 import Layout from "../components/Layout";
-import site from "../data";
-import draw from "../utils/triangle";
+import site from "../components/Layout/data";
+import draw from "../components/utils/triangle";
 import "./style.scss";
 
 type Props = {

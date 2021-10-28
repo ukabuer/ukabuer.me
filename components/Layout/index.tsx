@@ -2,7 +2,7 @@ import { FunctionComponent } from "preact";
 import { Head } from "muggle-client";
 import Header from "../Header";
 import Footer from "../Footer";
-import "../style.scss";
+import "./style.scss";
 
 const Layout: FunctionComponent = ({ children }) => {
   return (

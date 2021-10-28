@@ -16,7 +16,7 @@
     "feed": "^4.2.2",
     "isomorphic-unfetch": "^3.1.0",
     "marked": "^2.0.6",
-    "muggle": "^0.8.1",
+    "muggle": "^0.8.3",
     "preact": "^10.5.13",
     "sass": "^1.32.12",
     "typescript": "^4.2.4",

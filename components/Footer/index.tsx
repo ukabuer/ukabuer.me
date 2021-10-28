@@ -1,12 +1,13 @@
 import { FunctionComponent } from "preact";
-import { Link, useRouter } from "wouter-preact";
-import { useAppContext } from "muggle/client";
-import site from '../../data';
+import { useRouter } from "wouter-preact";
+import { Link, useAppContext } from "muggle/client";
+import site from '../Layout/data';
 import "./style.scss";
 
 const Footer: FunctionComponent = () => {
   const { location } = useAppContext();
   const { matcher } = useRouter();
+  console.log(location)
   const [isHome] = matcher("/", location);
 
   return (
