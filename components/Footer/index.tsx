@@ -5,7 +5,6 @@ import "./style.scss";
 
 const Footer: FunctionComponent = () => {
   const { location } = useAppContext();
-  console.log(location);
   const isHome = location == "/";
 
   return (
