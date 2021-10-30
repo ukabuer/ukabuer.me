@@ -100,7 +100,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
 
 export async function preload(fetch: any, params: any) {
   try {
-    const res = await fetch(`/api/blog/${params.slug}/index.json`);
+    const res = await fetch(`/apis/blog/${params.slug}/index.json`);
     const data = await res.json();
     return data;
   } catch (err) {

@@ -52,7 +52,7 @@ const BlogPage: FunctionComponent<Props> = ({ page }) => {
 };
 
 export async function preload(fetch: any) {
-  const res = await fetch("/api/blog/index.json");
+  const res = await fetch("/apis/blog/index.json");
   return res.json();
 }
 

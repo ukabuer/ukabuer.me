@@ -12,7 +12,7 @@ const Layout: FunctionComponent = ({ children }) => {
           rel="alternate"
           type="application/rss+xml"
           title="ukabuer's personal site"
-          href="/api/rss/index.json"
+          href="/apis/rss/index.json"
         />
         <link rel="shortcut icon" href="/static/favicon.png" type="image/png" />
       </Head>
