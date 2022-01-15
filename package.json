@@ -15,7 +15,7 @@
   "dependencies": {
     "feed": "^4.2.2",
     "isomorphic-unfetch": "^3.1.0",
-    "marked": "^2.0.6",
+    "marked": "^4.0.10",
     "muggle": "^0.8.7",
     "preact": "^10.5.13",
     "sass": "^1.32.12",
