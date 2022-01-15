@@ -1,7 +1,6 @@
 import { FunctionComponent } from "preact";
 import { useCallback, useRef } from "preact/hooks";
 import { Head } from "muggle/client";
-import CommentLoader from "../../../components/Loading/comment";
 import Layout from "../../../components/Layout";
 import "./style.scss";
 
@@ -77,19 +76,20 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
           </div>
 
           <div class="comments">
-            <div class="loading">
-              <CommentLoader />
-              <div>载入评论中</div>
-            </div>
             <script
-              src="https://utteranc.es/client.js"
+              src="https://giscus.app/client.js"
               data-repo="ukabuer/ukabuer.me"
-              issue-term="pathname"
-              label="comment"
-              data-theme="github-light"
-              data-crossorigin="anonymous"
+              data-repo-id="MDEwOlJlcG9zaXRvcnkyNTkxODk4OTU="
+              data-category="Announcements"
+              data-category-id="DIC_kwDOD3Lsh84CArrp"
+              data-mapping="pathname"
+              data-reactions-enabled="1"
+              data-emit-metadata="0"
+              data-theme="light"
+              data-lang="zh-CN"
+              crossOrigin="anonymous"
               async
-            ></script>
+          />
           </div>
           <script src="/static/prism.js" async />
         </div>
