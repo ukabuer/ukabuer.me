@@ -1,8 +1,8 @@
-import { formatDate } from "../../../components/utils/index.js";
 import fetch from "isomorphic-unfetch";
-import { Article } from "../index.json.js";
-import marked from "marked";
+import { marked } from "marked";
 import { API } from "../../index.json.js";
+import { Article } from "../index.json.js";
+import { formatDate } from "../../../components/utils/index.js";
 
 export async function get(req: any) {
   const { slug } = req.params;

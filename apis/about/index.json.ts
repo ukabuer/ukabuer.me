@@ -1,5 +1,5 @@
 import fetch from "isomorphic-unfetch";
-import marked from "marked";
+import { marked } from "marked";
 import { API } from "../index.json.js";
 
 export async function get() {
