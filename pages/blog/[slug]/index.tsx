@@ -2,6 +2,7 @@ import { FunctionComponent } from "preact";
 import { useCallback, useRef } from "preact/hooks";
 import { Head } from "muggle/client";
 import Layout from "../../../components/Layout";
+import ClientOnlyComponents from "../../../components/ClientOnlyComponents";
 import "./style.scss";
 
 const easeOutSine = (progress: number) => Math.sin((progress * Math.PI) / 2);
@@ -74,26 +75,28 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
               </g>
             </svg>
           </div>
-
           <div class="comments">
-            <script
-              src="https://giscus.app/client.js"
-              data-repo="ukabuer/ukabuer.me"
-              data-repo-id="MDEwOlJlcG9zaXRvcnkyNTkxODk4OTU="
-              data-category="Announcements"
-              data-category-id="DIC_kwDOD3Lsh84CArrp"
-              data-mapping="pathname"
-              data-reactions-enabled="1"
-              data-emit-metadata="0"
-              data-theme="light"
-              data-lang="zh-CN"
-              crossOrigin="anonymous"
-              async
-          />
+            <div className="giscus"></div>
           </div>
-          <script src="/static/prism.js" async />
         </div>
       </div>
+      <ClientOnlyComponents once>
+        <script src="/static/prism.js" async />
+        <script
+          src="https://giscus.app/client.js"
+          data-repo="ukabuer/ukabuer.me"
+          data-repo-id="MDEwOlJlcG9zaXRvcnkyNTkxODk4OTU="
+          data-category="Announcements"
+          data-category-id="DIC_kwDOD3Lsh84CArrp"
+          data-mapping="pathname"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-theme="light"
+          data-lang="zh-CN"
+          crossOrigin="anonymous"
+          async
+        />
+      </ClientOnlyComponents>
     </Layout>
   );
 };

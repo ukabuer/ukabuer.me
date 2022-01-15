@@ -28,18 +28,6 @@
     padding-top: 16px;
     border-top: 2px dashed #333;
     box-sizing: border-box;
-    > div:first-child {
-      position: absolute;
-      left: 50%;
-      top: 100px;
-      transform: translate(-50%, -50%);
-      z-index: 0;
-      text-align: center;
-    }
-    > :global(.utterances) {
-      background: var(--bg-color);
-      z-index: 1;
-    }
   }
 
   .to-top {
