@@ -1,5 +1,7 @@
-import { FunctionComponent } from "preact";
-import { Head } from "muggle/client";
+import { h, FunctionComponent } from "preact";
+import { Head } from "muggle";
+import fetch from "node-fetch";
+import { marked } from "marked";
 import Layout from "../../components/Layout";
 import "./style.scss";
 
@@ -31,8 +33,12 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload(fetch: any): Promise<PageData> {
-  return fetch("/apis/about/index.json").then((res: any) => res.json());
+export async function preload(): Promise<PageData> {
+  const page = (await (await fetch(`${process.env.API}/about`)).json()) as any;
+
+  page.content = marked(page.content);
+
+  return page;
 }
 
 export default AboutPage;

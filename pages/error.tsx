@@ -1,9 +1,9 @@
-import { FunctionComponent } from "preact";
-import { Head, useAppContext } from "muggle/client";
+import { h, FunctionComponent } from "preact";
+import { Head } from "muggle";
 import Layout from "../components/Layout";
 
 const ErrorPage: FunctionComponent = () => {
-  const { page } = useAppContext();
+  const page = { error: "" };
   const data = page as { error: string };
 
   return (

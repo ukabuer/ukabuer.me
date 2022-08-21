@@ -1,10 +1,13 @@
-import { FunctionComponent } from "preact";
-import { useAppContext, Link } from "muggle/client";
+import { h, FunctionComponent } from "preact";
+import { useAppContext } from "muggle";
 import Loading from "../Loading";
 import "./style.scss";
 
 const Header: FunctionComponent = () => {
-  const { location, loading } = useAppContext();
+  const { path } = useAppContext();
+
+  const location = path;
+  const loading = false;
   const isHome = "/" === location;
   const isWorksPage = "/works/" === location;
   const isBlogPage = "/blog/" === location;
@@ -14,21 +17,21 @@ const Header: FunctionComponent = () => {
   return (
     <header class={isHome ? "home" : undefined}>
       <nav>
-        <Link href="/" className={isHome ? "active" : undefined}>
+        <a href="/" className={isHome ? "active" : undefined}>
           首页
-        </Link>
-        <Link href="/works/" className={isWorksPage ? "active" : undefined}>
+        </a>
+        <a href="/works/" className={isWorksPage ? "active" : undefined}>
           项目
-        </Link>
-        <Link
+        </a>
+        <a
           href="/blog/"
           className={isBlogPage || isArticlePage ? "active" : undefined}
         >
           文章
-        </Link>
-        <Link href="/about/" className={isAboutPage ? "active" : undefined}>
+        </a>
+        <a href="/about/" className={isAboutPage ? "active" : undefined}>
           关于
-        </Link>
+        </a>
       </nav>
       {loading && <Loading />}
     </header>

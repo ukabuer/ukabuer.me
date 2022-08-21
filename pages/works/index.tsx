@@ -1,5 +1,6 @@
-import { FunctionComponent } from "preact";
-import { Head } from "muggle/client";
+import { h, Fragment, FunctionComponent } from "preact";
+import { Head } from "muggle";
+import fetch from "node-fetch";
 import Layout from "../../components/Layout";
 import "./style.scss";
 
@@ -23,7 +24,7 @@ type Props = {
   page: PageData;
 };
 
-const AboutPage: FunctionComponent<Props> = ({ page }) => {
+const WorksPage: FunctionComponent<Props> = ({ page }) => {
   return (
     <Layout>
       <div className="page works">
@@ -92,9 +93,10 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload(fetch: any) {
-  const res = await fetch("/apis/works/index.json");
-  return res.json();
+export async function preload() {
+  const page = await (await fetch(`${process.env.API}/works`)).json();
+
+  return page;
 }
 
-export default AboutPage;
+export default WorksPage;

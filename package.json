@@ -14,12 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "feed": "^4.2.2",
-    "isomorphic-unfetch": "^3.1.0",
-    "marked": "^4.0.10",
-    "muggle": "^0.8.8",
-    "preact": "^10.5.13",
+    "marked": "^4.0.19",
+    "muggle": "^0.8.14-beta.4",
+    "node-fetch": "^3.2.10",
+    "preact": "^10.10.0",
+    "preact-render-to-string": "^5.2.2",
     "sass": "^1.32.12",
-    "typescript": "^4.2.4"
+    "typescript": "^4.7.4"
   },
   "devDependencies": {
     "@types/marked": "^4.0.1",

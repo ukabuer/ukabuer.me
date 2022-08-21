@@ -1,10 +1,11 @@
-import { FunctionComponent } from "preact";
-import { Head, Link } from "muggle/client";
+import { h, FunctionComponent } from "preact";
+import { Head } from "muggle";
+import fetch from "node-fetch";
 import Layout from "../../components/Layout";
+import { formatDate } from "../../components/utils/index.js";
 import "./style.scss";
 
 type Props = {
-  url: string;
   page: {
     title: string;
     slogan: string;
@@ -38,9 +39,9 @@ const BlogPage: FunctionComponent<Props> = ({ page }) => {
                     {post.title}
                   </a>
                 ) : (
-                  <Link rel="prefetch" href={`/blog/${post.slug}/`}>
+                  <a rel="prefetch" href={`/blog/${post.slug}/`}>
                     {post.title}
-                  </Link>
+                  </a>
                 )}
               </h1>
             </div>
@@ -51,9 +52,38 @@ const BlogPage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload(fetch: any) {
-  const res = await fetch("/apis/blog/index.json");
-  return res.json();
+export type Article = {
+  title: string;
+  slug: string;
+  content: string;
+  external: string;
+  date: string;
+};
+
+export async function preload() {
+  const API = process.env.API;
+  const page = (await (await fetch(`${API}/blog`)).json()) as Record<
+    string,
+    unknown
+  >;
+  const request = await fetch(`${API}/articles`);
+  const posts = (await request.json()) as Article[];
+
+  const sorted = posts
+    .sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    })
+    .map((item) => ({
+      title: item.title,
+      slug: item.slug,
+      external: item.external,
+      date: formatDate(new Date(item.date)),
+    }));
+
+  return {
+    ...page,
+    posts: sorted,
+  };
 }
 
 export default BlogPage;
