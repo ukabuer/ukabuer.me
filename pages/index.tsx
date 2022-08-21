@@ -1,6 +1,7 @@
-import { FunctionComponent } from "preact";
+import { h, Fragment, FunctionComponent } from "preact";
 import { useCallback, useEffect, useRef } from "preact/hooks";
-import { Head } from "muggle/client";
+import { Head } from "muggle";
+import fetch from "node-fetch";
 import Layout from "../components/Layout";
 import site from "../components/Layout/data";
 import draw from "../components/utils/triangle";
@@ -121,9 +122,11 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload(fetch: any) {
-  const res = await fetch("/apis/index.json");
-  return res.json();
+export async function preload() {
+  const request = await fetch(`${process.env.API}/home`);
+  const page = await request.json();
+
+  return page;
 }
 
 export default IndexPage;

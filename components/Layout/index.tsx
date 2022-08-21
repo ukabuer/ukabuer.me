@@ -1,5 +1,5 @@
-import { FunctionComponent } from "preact";
-import { Head } from "muggle-client";
+import { h, FunctionComponent } from "preact";
+import { Head } from "muggle";
 import Header from "../Header";
 import Footer from "../Footer";
 import "./style.scss";

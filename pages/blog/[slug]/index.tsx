@@ -1,8 +1,11 @@
-import { FunctionComponent } from "preact";
+import { h, FunctionComponent } from "preact";
 import { useCallback, useRef } from "preact/hooks";
-import { Head } from "muggle/client";
+import { Head } from "muggle";
+import fetch from "node-fetch";
+import { marked } from "marked";
 import Layout from "../../../components/Layout";
 import ClientOnlyComponents from "../../../components/ClientOnlyComponents";
+import { formatDate } from "../../../components/utils/index.js";
 import "./style.scss";
 
 const easeOutSine = (progress: number) => Math.sin((progress * Math.PI) / 2);
@@ -101,14 +104,33 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload(fetch: any, params: any) {
-  try {
-    const res = await fetch(`/apis/blog/${params.slug}/index.json`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return { error: "Not Found" };
+export type Article = {
+  title: string;
+  slug: string;
+  content: string;
+  external: string;
+  date: string;
+};
+
+export async function preload(params: any) {
+  const { slug } = params;
+  const request = await fetch(`${process.env.API}/articles?slug=${slug}`);
+  const posts = (await request.json()) as Article[];
+
+  if (posts.length < 1) {
+    return {
+      error: `Not found`,
+    };
   }
+
+  const post = posts[0];
+  const article = {
+    ...post,
+    date: formatDate(new Date(post.date)),
+    content: marked(post.content),
+  };
+
+  return article;
 }
 
 export default ArticlePage;

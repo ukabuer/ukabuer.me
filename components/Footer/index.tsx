@@ -1,18 +1,19 @@
-import { FunctionComponent } from "preact";
-import { Link, useAppContext } from "muggle/client";
-import site from '../Layout/data';
+import { h, FunctionComponent } from "preact";
+import { useAppContext } from "muggle";
+import site from "../Layout/data";
 import "./style.scss";
 
 const Footer: FunctionComponent = () => {
-  const { location } = useAppContext();
-  const isHome = location == "/";
+  const { path } = useAppContext();
+
+  const isHome = path == "/";
 
   return (
-    <footer className={isHome ? 'home' : undefined}>
+    <footer className={isHome ? "home" : undefined}>
       <p>May the Goddess smile upon you.</p>
       <p>
         <span>© 2014 ~ {new Date().getFullYear()} </span>
-        <Link href={site.author.link}>{site.author.name}</Link>
+        <a href={site.author.link}>{site.author.name}</a>
       </p>
       <p>
         <span>Built with &#129505;</span>
