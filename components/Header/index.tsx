@@ -1,7 +1,7 @@
 import { h, FunctionComponent } from "preact";
-import { useAppContext } from "muggle";
+import { Head, useAppContext } from "muggle";
 import Loading from "../Loading";
-import "./style.scss";
+import css from "./style.scss";
 
 const Header: FunctionComponent = () => {
   const { path } = useAppContext();
@@ -16,6 +16,9 @@ const Header: FunctionComponent = () => {
 
   return (
     <header class={isHome ? "home" : undefined}>
+      <Head>
+        <style>{css}</style>
+      </Head>
       <nav>
         <a href="/" className={isHome ? "active" : undefined}>
           首页

@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 import Layout from "../components/Layout";
 import site from "../components/Layout/data";
 import draw from "../components/utils/triangle";
-import "./style.scss";
+import css from "./style.scss";
 
 type Props = {
   page: {
@@ -62,6 +62,7 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
       <div className="page home">
         <Head>
           <title>{page.title}</title>
+          <style>{css}</style>
         </Head>
         <div class="banner">
           <canvas ref={canvasEl} />

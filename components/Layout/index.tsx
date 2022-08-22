@@ -2,12 +2,13 @@ import { h, FunctionComponent } from "preact";
 import { Head } from "muggle";
 import Header from "../Header";
 import Footer from "../Footer";
-import "./style.scss";
+import css from "./style.scss";
 
 const Layout: FunctionComponent = ({ children }) => {
   return (
     <div id="app">
       <Head>
+        <style>{css}</style>
         <link
           rel="alternate"
           type="application/rss+xml"

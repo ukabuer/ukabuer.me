@@ -3,7 +3,7 @@ import { Head } from "muggle";
 import fetch from "node-fetch";
 import { marked } from "marked";
 import Layout from "../../components/Layout";
-import "./style.scss";
+import css from "./style.scss";
 
 type PageData = {
   title: string;
@@ -21,6 +21,7 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
       <div className="page about">
         <Head>
           <title>{page.title}</title>
+          <style>{css}</style>
         </Head>
         <div className="banner">
           <div>{page.slogan}</div>
