@@ -3,7 +3,7 @@ import { Head } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../../components/Layout";
 import { formatDate } from "../../components/utils/index.js";
-import "./style.scss";
+import css from "./style.scss";
 
 type Props = {
   page: {
@@ -24,6 +24,7 @@ const BlogPage: FunctionComponent<Props> = ({ page }) => {
       <div className="page blog">
         <Head>
           <title>{page.title}</title>
+          <style>{css}</style>
         </Head>
         <div class="banner">
           <div>{page.slogan}</div>

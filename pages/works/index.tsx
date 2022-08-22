@@ -2,7 +2,7 @@ import { h, Fragment, FunctionComponent } from "preact";
 import { Head } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../../components/Layout";
-import "./style.scss";
+import css from "./style.scss";
 
 type PageData = {
   title: string;
@@ -30,6 +30,7 @@ const WorksPage: FunctionComponent<Props> = ({ page }) => {
       <div className="page works">
         <Head>
           <title>{page.title}</title>
+          <style>{css}</style>
         </Head>
         <div class="banner">
           <div>{page.slogan}</div>

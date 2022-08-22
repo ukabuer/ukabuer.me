@@ -6,7 +6,7 @@ import { marked } from "marked";
 import Layout from "../../../components/Layout";
 import ClientOnlyComponents from "../../../components/ClientOnlyComponents";
 import { formatDate } from "../../../components/utils/index.js";
-import "./style.scss";
+import css from "./style.scss";
 
 const easeOutSine = (progress: number) => Math.sin((progress * Math.PI) / 2);
 
@@ -51,6 +51,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }) => {
         <Head>
           <title>{page.title}</title>
           <link rel="stylesheet" href="/static/prism.css" />
+          <style>{css}</style>
         </Head>
         <div class="banner">
           <div>
