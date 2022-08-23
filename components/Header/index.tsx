@@ -15,7 +15,7 @@ const Header: FunctionComponent = () => {
   const isAboutPage = "/about/" === location;
 
   return (
-    <header class={isHome ? "home" : undefined}>
+    <header className={isHome ? "home" : undefined}>
       <Head>
         <style>{css}</style>
       </Head>

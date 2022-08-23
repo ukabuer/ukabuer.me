@@ -1,8 +1,13 @@
-import './comment.scss'
+import { FunctionalComponent, h } from "preact";
+import { Head } from "muggle";
+import css from "./comment.scss";
 
-const CommentLoader = () => {
+const CommentLoader: FunctionalComponent = () => {
   return (
-    <div class="lds-ring">
+    <div className="lds-ring">
+      <Head>
+        <style>{css}</style>
+      </Head>
       <div />
       <div />
       <div />

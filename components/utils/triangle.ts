@@ -25,7 +25,7 @@ export default function draw(
   ctx: CanvasRenderingContext2D,
   colors: string[],
   gap: number
-) {
+): void {
   const { width, height } = ctx.canvas;
   ctx.clearRect(0, 0, width, height);
   const lines: Array<Array<Point>> = [];

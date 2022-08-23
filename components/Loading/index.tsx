@@ -1,11 +1,11 @@
-import { FunctionComponent } from "preact";
+import { h, FunctionComponent } from "preact";
 import "./style.scss";
 
 const Loading: FunctionComponent = () => {
   return (
-      <div class="page-loader">
-        <div />
-      </div>
+    <div className="page-loader">
+      <div />
+    </div>
   );
 };
 

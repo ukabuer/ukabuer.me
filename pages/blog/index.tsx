@@ -2,7 +2,7 @@ import { h, FunctionComponent } from "preact";
 import { Head } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../../components/Layout";
-import { formatDate } from "../../components/utils/index.js";
+import { formatDate, API } from "../../components/utils";
 import css from "./style.scss";
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
   };
 };
 
-const BlogPage: FunctionComponent<Props> = ({ page }) => {
+const BlogPage: FunctionComponent<Props> = ({ page }: Props) => {
   return (
     <Layout>
       <div className="page blog">
@@ -26,17 +26,17 @@ const BlogPage: FunctionComponent<Props> = ({ page }) => {
           <title>{page.title}</title>
           <style>{css}</style>
         </Head>
-        <div class="banner">
+        <div className="banner">
           <div>{page.slogan}</div>
         </div>
 
-        <div class="section">
+        <div className="section">
           {page.posts.map((post) => (
-            <div class="post-item">
+            <div className="post-item" key={post.external || post.slug}>
               <div>{post.date}</div>
               <h1>
                 {post.external ? (
-                  <a href={post.external} target="_blank" rel="noopener">
+                  <a href={post.external} target="_blank" rel="noreferrer">
                     {post.title}
                   </a>
                 ) : (
@@ -61,8 +61,7 @@ export type Article = {
   date: string;
 };
 
-export async function preload() {
-  const API = process.env.API;
+export async function preload(): Promise<unknown> {
   const page = (await (await fetch(`${API}/blog`)).json()) as Record<
     string,
     unknown

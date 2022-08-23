@@ -3,6 +3,7 @@ import { Head } from "muggle";
 import fetch from "node-fetch";
 import { marked } from "marked";
 import Layout from "../../components/Layout";
+import { API } from "../../components/utils";
 import css from "./style.scss";
 
 type PageData = {
@@ -15,7 +16,7 @@ type Props = {
   page: PageData;
 };
 
-const AboutPage: FunctionComponent<Props> = ({ page }) => {
+const AboutPage: FunctionComponent<Props> = ({ page }: Props) => {
   return (
     <Layout>
       <div className="page about">
@@ -35,7 +36,7 @@ const AboutPage: FunctionComponent<Props> = ({ page }) => {
 };
 
 export async function preload(): Promise<PageData> {
-  const page = (await (await fetch(`${process.env.API}/about`)).json()) as any;
+  const page = (await (await fetch(`${API}/about`)).json()) as PageData;
 
   page.content = marked(page.content);
 

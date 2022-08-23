@@ -1,10 +1,10 @@
 import { h, Fragment, FunctionComponent } from "preact";
-import { useCallback, useEffect, useRef } from "preact/hooks";
 import { Head } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../components/Layout";
+import Banner from "../islands/Banner";
 import site from "../components/Layout/data";
-import draw from "../components/utils/triangle";
+import { API } from "../components/utils";
 import css from "./style.scss";
 
 type Props = {
@@ -19,44 +19,7 @@ type Props = {
   };
 };
 
-const IndexPage: FunctionComponent<Props> = ({ page }) => {
-  const canvasEl = useRef<HTMLCanvasElement>(null);
-  const drawBanner = useCallback(() => {
-    const canvas = canvasEl.current;
-    if (!canvas) return;
-
-    const gap = 60;
-    const colors = [
-      "#b2ddd4",
-      "#a9d8d0",
-      "#a4d6cd",
-      "#a2d4c9",
-      "#91cdcb",
-      "#84c8c9",
-      "#7ec5c9",
-      "#5ab5ca",
-      "#53b1ca",
-      "#58b4c9",
-      "#4396c8",
-      "#3a85c9",
-    ];
-    const ctx = canvas.getContext("2d");
-    canvas.width = document.body.clientWidth;
-    canvas.height = 200;
-
-    if (!ctx) return;
-
-    draw(ctx, colors, gap);
-  }, []);
-
-  useEffect(() => {
-    drawBanner();
-    window.addEventListener("resize", drawBanner);
-    return () => {
-      window.removeEventListener("resize", drawBanner);
-    };
-  }, [drawBanner]);
-
+const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
   return (
     <Layout>
       <div className="page home">
@@ -64,21 +27,26 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
           <title>{page.title}</title>
           <style>{css}</style>
         </Head>
-        <div class="banner">
-          <canvas ref={canvasEl} />
+        <div className="banner">
+          <Banner />
         </div>
-        <div class="profile card">
+        <div className="profile card">
           <div>
             <img src={site.author.avatar} alt="" />
-            <div class="card-main">
+            <div className="card-main">
               <div>
-                <span class="card-title">{site.author.name}</span>
+                <span className="card-title">{site.author.name}</span>
               </div>
-              <div class="gray">{site.author.identities.join(" / ")}</div>
-              <div class="social">
+              <div className="gray">{site.author.identities.join(" / ")}</div>
+              <div className="social">
                 {site.author.social.map((social) => (
                   <>
-                    <a href={social.link} title={social.name} target="_blank">
+                    <a
+                      href={social.link}
+                      title={social.name}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {social.name}
                     </a>
                   </>
@@ -86,30 +54,35 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
               </div>
             </div>
           </div>
-          <div class="card-intro">
+          <div className="card-intro">
             <span>{site.author.introduce}</span>
           </div>
         </div>
 
-        <div class="section">
+        <div className="section">
           <h1>Gallery</h1>
 
-          <div class="row">
+          <div className="row">
             {page.projects.map((item) => (
-              <div class="project">
-                <div class="card">
+              <div className="project" key={item.link}>
+                <div className="card">
                   <div
-                    class="card-thumbnail"
+                    className="card-thumbnail"
                     style={{ backgroundImage: `url(${item.thumbnail})` }}
                   ></div>
 
-                  <div class="card-intro">
+                  <div className="card-intro">
                     <div>
-                      <a href={item.link} class="card-title" target="_blank">
+                      <a
+                        href={item.link}
+                        className="card-title"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         {item.title}
                       </a>
                     </div>
-                    <div class="gray">
+                    <div className="gray">
                       <span>{item.description}</span>
                     </div>
                   </div>
@@ -123,8 +96,8 @@ const IndexPage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload() {
-  const request = await fetch(`${process.env.API}/home`);
+export async function preload(): Promise<unknown> {
+  const request = await fetch(`${API}/home`);
   const page = await request.json();
 
   return page;
