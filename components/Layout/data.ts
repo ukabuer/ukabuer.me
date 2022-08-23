@@ -19,4 +19,4 @@ export default {
     introduce: "人形自走复读机。",
     identities: ["社畜", "程序员", "宅"],
   },
-}
+};

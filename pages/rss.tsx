@@ -1,9 +1,9 @@
 import { Feed } from "feed";
-import fetch from "isomorphic-unfetch";
-import { API } from "../index.json.js";
-import { Article } from "../blog/index.json.js";
+import fetch from "node-fetch";
+import { h, FunctionComponent } from "preact";
+import { Article } from "../pages/blog/[slug]";
 
-export async function get() {
+export async function preload() {
   const feed = new Feed({
     title: "ukabuer.me",
     description: "ukabuer's personal site",
@@ -13,7 +13,7 @@ export async function get() {
     copyright: `All rights reserved 2014-${new Date().getFullYear()}, ukabuer`,
   });
 
-  const request = await fetch(`${API}/articles`);
+  const request = await fetch(`${process.env.API}/articles`);
   const posts = (await request.json()) as Article[];
 
   posts
@@ -30,5 +30,15 @@ export async function get() {
       });
     });
 
-  return JSON.parse(feed.json1());
+  return feed.json1();
 }
+
+type Props = {
+  page: string;
+};
+
+const RSS: FunctionComponent<Props> = ({ page }: Props) => {
+  return <div>{page}</div>;
+};
+
+export default RSS;

@@ -21,7 +21,11 @@ const Footer: FunctionComponent = () => {
       <p>
         <span>Built with &#129505;</span>
         <span> and </span>
-        <a href="https://github.com/ukabuer/muggle" target="_blank">
+        <a
+          href="https://github.com/ukabuer/muggle"
+          rel="noreferrer"
+          target="_blank"
+        >
           muggle
         </a>
       </p>

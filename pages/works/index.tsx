@@ -2,6 +2,7 @@ import { h, Fragment, FunctionComponent } from "preact";
 import { Head } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../../components/Layout";
+import { API } from "../../components/utils";
 import css from "./style.scss";
 
 type PageData = {
@@ -24,7 +25,7 @@ type Props = {
   page: PageData;
 };
 
-const WorksPage: FunctionComponent<Props> = ({ page }) => {
+const WorksPage: FunctionComponent<Props> = ({ page }: Props) => {
   return (
     <Layout>
       <div className="page works">
@@ -32,23 +33,27 @@ const WorksPage: FunctionComponent<Props> = ({ page }) => {
           <title>{page.title}</title>
           <style>{css}</style>
         </Head>
-        <div class="banner">
+        <div className="banner">
           <div>{page.slogan}</div>
         </div>
 
-        <div class="section">
+        <div className="section">
           {Object.keys(page.works).map((subtitle) => (
             <>
-              <h1 class="center">{subtitle}</h1>
+              <h1 className="center">{subtitle}</h1>
               {page.works[subtitle] && (
-                <div class="row">
+                <div className="row">
                   {page.works[subtitle].map((item) =>
                     item.image ? (
-                      <div class="work-item image">
+                      <div className="work-item image">
                         <div>
                           <span>{item.category}</span>
                           <h1>
-                            <a href={item.link} target="_blank" rel="noopener">
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
                               {item.title}
                             </a>
                           </h1>
@@ -56,11 +61,15 @@ const WorksPage: FunctionComponent<Props> = ({ page }) => {
                         </div>
                       </div>
                     ) : (
-                      <div class="work-item text">
+                      <div className="work-item text">
                         <div>
                           <span>{item.category}</span>
                           <h1>
-                            <a href={item.link} target="_blank" rel="noopener">
+                            <a
+                              href={item.link}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
                               {item.title}
                             </a>
                           </h1>
@@ -76,7 +85,7 @@ const WorksPage: FunctionComponent<Props> = ({ page }) => {
                             </p>
                             <ul>
                               {item.features.map((feature) => (
-                                <li>{feature}</li>
+                                <li key={feature}>{feature}</li>
                               ))}
                             </ul>
                           </article>
@@ -94,8 +103,8 @@ const WorksPage: FunctionComponent<Props> = ({ page }) => {
   );
 };
 
-export async function preload() {
-  const page = await (await fetch(`${process.env.API}/works`)).json();
+export async function preload(): Promise<unknown> {
+  const page = await (await fetch(`${API}/works`)).json();
 
   return page;
 }
