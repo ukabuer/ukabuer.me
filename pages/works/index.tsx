@@ -1,5 +1,5 @@
 import { h, Fragment, FunctionComponent } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../../components/Layout";
 import { API } from "../../components/utils";
@@ -31,7 +31,7 @@ const WorksPage: FunctionComponent<Props> = ({ page }: Props) => {
 			<div className="page works">
 				<Head>
 					<title>{page.title}</title>
-					<style>{css}</style>
+					<Style>{css}</Style>
 				</Head>
 				<div className="banner">
 					<div>{page.slogan}</div>

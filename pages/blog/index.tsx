@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../../components/Layout";
 import { formatDate, API } from "../../components/utils";
@@ -24,7 +24,7 @@ const BlogPage: FunctionComponent<Props> = ({ page }: Props) => {
 			<div className="page blog">
 				<Head>
 					<title>{page.title}</title>
-					<style>{css}</style>
+					<Style>{css}</Style>
 				</Head>
 				<div className="banner">
 					<div>{page.slogan}</div>

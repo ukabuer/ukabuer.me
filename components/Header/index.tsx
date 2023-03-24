@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact";
-import { Head, useServerRenderContext } from "muggle";
+import { Head, Style, useServerRenderContext } from "muggle";
 import Loading from "../Loading";
 import css from "./style.scss?inline";
 
@@ -17,7 +17,7 @@ const Header: FunctionComponent = () => {
 	return (
 		<header className={isHome ? "home" : undefined}>
 			<Head>
-				<style>{css}</style>
+				<Style>{css}</Style>
 			</Head>
 			<nav>
 				<a href="/" className={isHome ? "active" : undefined}>

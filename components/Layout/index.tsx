@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import Header from "../Header";
 import Footer from "../Footer";
 import css from "./style.scss?inline";
@@ -8,7 +8,7 @@ const Layout: FunctionComponent = ({ children }) => {
 	return (
 		<div id="app">
 			<Head>
-				<style>{css}</style>
+				<Style>{css}</Style>
 				<link
 					rel="alternate"
 					type="application/rss+xml"

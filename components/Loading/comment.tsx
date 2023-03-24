@@ -1,12 +1,12 @@
 import { FunctionalComponent, h } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import css from "./comment.scss?inline";
 
 const CommentLoader: FunctionalComponent = () => {
 	return (
 		<div className="lds-ring">
 			<Head>
-				<style>{css}</style>
+				<Style>{css}</Style>
 			</Head>
 			<div />
 			<div />

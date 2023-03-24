@@ -1,5 +1,5 @@
 import { h, Fragment, FunctionComponent } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import fetch from "node-fetch";
 import Layout from "../components/Layout";
 import Banner from "../islands/Banner";
@@ -25,7 +25,7 @@ const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
 			<div className="page home">
 				<Head>
 					<title>{page.title}</title>
-					<style>{css}</style>
+					<Style>{css}</Style>
 				</Head>
 				<div className="banner">
 					<Banner />

@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import fetch from "node-fetch";
 import { marked } from "marked";
 import Layout from "../../../components/Layout";
@@ -22,7 +22,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }: Props) => {
 				<Head>
 					<title>{page.title}</title>
 					<link rel="stylesheet" href="/static/prism.css" />
-					<style>{css}</style>
+					<Style>{css}</Style>
 					<script src="/static/prism.js" async />
 					<script
 						src="https://giscus.app/client.js"

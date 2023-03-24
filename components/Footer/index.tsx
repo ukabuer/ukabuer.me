@@ -1,5 +1,5 @@
 import { h, FunctionComponent } from "preact";
-import { Head, useServerRenderContext } from "muggle";
+import { Head, Style, useServerRenderContext } from "muggle";
 import site from "../Layout/data";
 import css from "./style.scss?inline";
 
@@ -11,7 +11,7 @@ const Footer: FunctionComponent = () => {
 	return (
 		<footer className={isHome ? "home" : undefined}>
 			<Head>
-				<style>{css}</style>
+				<Style>{css}</Style>
 			</Head>
 			<p>May the Goddess smile upon you.</p>
 			<p>
