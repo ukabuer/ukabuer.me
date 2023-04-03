@@ -6,7 +6,7 @@ import css from "./style.scss?inline";
 
 const Layout: FunctionComponent = ({ children }) => {
 	return (
-		<div id="app">
+		<div id="app" data-pjax-wrapper>
 			<Head>
 				<Style>{css}</Style>
 				<link

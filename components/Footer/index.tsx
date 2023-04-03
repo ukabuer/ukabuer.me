@@ -1,10 +1,10 @@
 import { h, FunctionComponent } from "preact";
-import { Head, Style, useServerRenderContext } from "muggle";
+import { Head, Style, useAppContext } from "muggle";
 import site from "../Layout/data";
 import css from "./style.scss?inline";
 
 const Footer: FunctionComponent = () => {
-	const { path } = useServerRenderContext();
+	const { path } = useAppContext();
 
 	const isHome = path === "/";
 

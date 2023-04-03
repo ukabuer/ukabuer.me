@@ -1,13 +1,12 @@
 import { h, FunctionComponent } from "preact";
-import { Head, Style, useServerRenderContext } from "muggle";
-import Loading from "../Loading";
+import { Head, Style, useAppContext } from "muggle";
+import Loading from "../../islands/Loading";
 import css from "./style.scss?inline";
 
 const Header: FunctionComponent = () => {
-	const { path } = useServerRenderContext();
+	const { path } = useAppContext();
 
 	const location = path;
-	const loading = false;
 	const isHome = "/" === location;
 	const isWorksPage = "/works/" === location;
 	const isBlogPage = "/blog/" === location;
@@ -36,7 +35,7 @@ const Header: FunctionComponent = () => {
 					关于
 				</a>
 			</nav>
-			{loading && <Loading />}
+			<Loading />
 		</header>
 	);
 };
