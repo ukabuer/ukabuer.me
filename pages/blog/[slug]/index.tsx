@@ -23,7 +23,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }: Props) => {
 					<title>{page.title}</title>
 					<link rel="stylesheet" href="/static/prism.css" />
 					<Style>{css}</Style>
-					<script src="/static/prism.js" async />
+					<script src="/static/prism.js" async data-pjax-reload />
 					<script
 						src="https://giscus.app/client.js"
 						data-repo="ukabuer/ukabuer.me"
@@ -35,6 +35,7 @@ const ArticlePage: FunctionComponent<Props> = ({ page }: Props) => {
 						data-emit-metadata="0"
 						data-theme="light"
 						data-lang="zh-CN"
+						data-pjax-reload
 						crossOrigin="anonymous"
 						async
 					/>
