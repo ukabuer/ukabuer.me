@@ -1,10 +1,9 @@
 import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
-import fetch from "node-fetch";
 import { marked } from "marked";
 import Layout from "../../components/Layout";
 import { API } from "../../components/utils";
-import css from "./style.scss?inline";
+import * as styles from "./about.css.js";
 
 type PageData = {
 	title: string;
@@ -19,15 +18,15 @@ type Props = {
 const AboutPage: FunctionComponent<Props> = ({ page }: Props) => {
 	return (
 		<Layout>
-			<div className="page about">
+			<div>
 				<Head>
 					<title>{page.title}</title>
-					<Style>{css}</Style>
+					<Style>{styles.default}</Style>
 				</Head>
-				<div className="banner">
+				<div className={styles.banner}>
 					<div>{page.slogan}</div>
 				</div>
-				<div className="section">
+				<div className={styles.section}>
 					{/* rome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
 					<article dangerouslySetInnerHTML={{ __html: page.content }} />
 				</div>

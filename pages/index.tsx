@@ -1,11 +1,10 @@
 import { h, Fragment, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
-import fetch from "node-fetch";
 import Layout from "../components/Layout";
 import Banner from "../islands/Banner";
 import site from "../components/Layout/data";
 import { API } from "../components/utils";
-import css from "./style.scss?inline";
+import * as styles from "./index.css.js";
 
 type Props = {
 	page: {
@@ -22,23 +21,23 @@ type Props = {
 const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
 	return (
 		<Layout>
-			<div className="page home">
+			<div className={styles.page}>
 				<Head>
 					<title>{page.title}</title>
-					<Style>{css}</Style>
+					<Style>{styles.default}</Style>
 				</Head>
-				<div className="banner">
+				<div className={styles.banner}>
 					<Banner />
 				</div>
-				<div className="profile card">
+				<div className={styles.profile}>
 					<div>
 						<img src={site.author.avatar} alt="" />
-						<div className="card-main">
+						<div className={styles.cardMain}>
 							<div>
-								<span className="card-title">{site.author.name}</span>
+								<span className={styles.cardTitle}>{site.author.name}</span>
 							</div>
-							<div className="gray">{site.author.identities.join(" / ")}</div>
-							<div className="social">
+							<div>{site.author.identities.join(" / ")}</div>
+							<div className={styles.social}>
 								{site.author.social.map((social) => (
 									<>
 										<a
@@ -54,35 +53,35 @@ const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
 							</div>
 						</div>
 					</div>
-					<div className="card-intro">
+					<div className={styles.cardIntro}>
 						<span>{site.author.introduce}</span>
 					</div>
 				</div>
 
-				<div className="section">
+				<div className={styles.section}>
 					<h1>Gallery</h1>
 
-					<div className="row">
+					<div className={styles.row}>
 						{page.projects.map((item) => (
-							<div className="project" key={item.link}>
-								<div className="card">
+							<div className={styles.project} key={item.link}>
+								<div className={styles.card}>
 									<div
-										className="card-thumbnail"
+										className={styles.cardThumbnail}
 										style={{ backgroundImage: `url(${item.thumbnail})` }}
 									/>
 
-									<div className="card-intro">
+									<div className={styles.cardIntro}>
 										<div>
 											<a
 												href={item.link}
-												className="card-title"
+												className={styles.cardTitle}
 												target="_blank"
 												rel="noreferrer"
 											>
 												{item.title}
 											</a>
 										</div>
-										<div className="gray">
+										<div>
 											<span>{item.description}</span>
 										</div>
 									</div>

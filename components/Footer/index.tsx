@@ -1,7 +1,7 @@
 import { h, FunctionComponent } from "preact";
 import { Head, Style, useAppContext } from "muggle";
 import site from "../Layout/data";
-import css from "./style.scss?inline";
+import * as styles from "./footer.css.js";
 
 const Footer: FunctionComponent = () => {
 	const { path } = useAppContext();
@@ -9,9 +9,9 @@ const Footer: FunctionComponent = () => {
 	const isHome = path === "/";
 
 	return (
-		<footer className={isHome ? "home" : undefined}>
+		<footer className={isHome ? styles.homeFooter : styles.footer}>
 			<Head>
-				<Style>{css}</Style>
+				<Style>{styles.default}</Style>
 			</Head>
 			<p>May the Goddess smile upon you.</p>
 			<p>

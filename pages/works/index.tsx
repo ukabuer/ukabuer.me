@@ -1,9 +1,8 @@
 import { h, Fragment, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
-import fetch from "node-fetch";
 import Layout from "../../components/Layout";
 import { API } from "../../components/utils";
-import css from "./style.scss?inline";
+import * as styles from "./works.css.js";
 
 type PageData = {
 	title: string;
@@ -28,24 +27,24 @@ type Props = {
 const WorksPage: FunctionComponent<Props> = ({ page }: Props) => {
 	return (
 		<Layout>
-			<div className="page works">
+			<div className={styles.page}>
 				<Head>
 					<title>{page.title}</title>
-					<Style>{css}</Style>
+					<Style>{styles.default}</Style>
 				</Head>
-				<div className="banner">
+				<div className={styles.banner}>
 					<div>{page.slogan}</div>
 				</div>
 
-				<div className="section">
+				<div className={styles.section}>
 					{Object.keys(page.works).map((subtitle) => (
 						<>
-							<h1 className="center">{subtitle}</h1>
+							<h1>{subtitle}</h1>
 							{page.works[subtitle] && (
-								<div className="row">
+								<div className={styles.row}>
 									{page.works[subtitle].map((item) =>
 										item.image ? (
-											<div className="work-item image">
+											<div className={styles.workImageItem}>
 												<div>
 													<span>{item.category}</span>
 													<h1>
@@ -61,7 +60,7 @@ const WorksPage: FunctionComponent<Props> = ({ page }: Props) => {
 												</div>
 											</div>
 										) : (
-											<div className="work-item text">
+											<div className={styles.workTextItem}>
 												<div>
 													<span>{item.category}</span>
 													<h1>

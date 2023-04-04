@@ -1,11 +1,10 @@
 import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
-import fetch from "node-fetch";
 import { marked } from "marked";
 import Layout from "../../../components/Layout";
 import { formatDate, API } from "../../../components/utils";
-import css from "./style.scss?inline";
 import GoToTop from "../../../islands/GoToTop";
+import * as styles from "./post.css.js";
 
 type Props = {
 	page: {
@@ -18,11 +17,10 @@ type Props = {
 const ArticlePage: FunctionComponent<Props> = ({ page }: Props) => {
 	return (
 		<Layout>
-			<div className="page article">
+			<div className={styles.page}>
 				<Head>
 					<title>{page.title}</title>
 					<link rel="stylesheet" href="/static/prism.css" />
-					<Style>{css}</Style>
 					<script src="/static/prism.js" async data-pjax-reload />
 					<script
 						src="https://giscus.app/client.js"
@@ -39,18 +37,19 @@ const ArticlePage: FunctionComponent<Props> = ({ page }: Props) => {
 						crossOrigin="anonymous"
 						async
 					/>
+					<Style>{styles.default}</Style>
 				</Head>
-				<div className="banner">
+				<div className={styles.banner}>
 					<div>
 						<h1>{page.title}</h1>
 						<p>{page.date}</p>
 					</div>
 				</div>
-				<div className="section">
+				<div className={styles.section}>
 					{/* rome-ignore lint/security/noDangerouslySetInnerHtml: <explanation> */}
 					<article dangerouslySetInnerHTML={{ __html: page.content }} />
 					<GoToTop />
-					<div className="comments">
+					<div className={styles.comments}>
 						<div className="giscus" />
 					</div>
 				</div>

@@ -1,9 +1,8 @@
 import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
-import fetch from "node-fetch";
 import Layout from "../../components/Layout";
 import { formatDate, API } from "../../components/utils";
-import css from "./style.scss?inline";
+import * as styles from "./blog.css.js";
 
 type Props = {
 	page: {
@@ -21,18 +20,18 @@ type Props = {
 const BlogPage: FunctionComponent<Props> = ({ page }: Props) => {
 	return (
 		<Layout>
-			<div className="page blog">
+			<div className={styles.page}>
 				<Head>
 					<title>{page.title}</title>
-					<Style>{css}</Style>
+					<Style>{styles.default}</Style>
 				</Head>
-				<div className="banner">
+				<div className={styles.banner}>
 					<div>{page.slogan}</div>
 				</div>
 
-				<div className="section">
+				<div className={styles.section}>
 					{page.posts.map((post) => (
-						<div className="post-item" key={post.external || post.slug}>
+						<div className={styles.postItem} key={post.external || post.slug}>
 							<div>{post.date}</div>
 							<h1>
 								{post.external ? (
