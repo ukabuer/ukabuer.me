@@ -2,13 +2,13 @@ import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
 import Header from "../Header";
 import Footer from "../Footer";
-import css from "./style.scss?inline";
+import * as styles from "./global.css.js";
 
 const Layout: FunctionComponent = ({ children }) => {
 	return (
 		<div id="app" data-pjax-wrapper>
 			<Head>
-				<Style>{css}</Style>
+				<Style>{styles.default}</Style>
 				<meta charSet="UTF-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<meta http-equiv="X-UA-Compatible" content="IE=edge" />

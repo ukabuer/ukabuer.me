@@ -1,6 +1,7 @@
 import { h, FunctionComponent } from "preact";
-import { Head } from "muggle";
+import { Head, Style } from "muggle";
 import Layout from "../components/Layout";
+import * as styles from "./error.css";
 
 const ErrorPage: FunctionComponent = () => {
 	const page = { error: "" };
@@ -10,9 +11,10 @@ const ErrorPage: FunctionComponent = () => {
 		<Layout>
 			<Head>
 				<title>Error</title>
+				<Style>{styles.default}</Style>
 			</Head>
-			<div className="page error">
-				<div className="section">
+			<div className={styles.page}>
+				<div className={styles.section}>
 					<h1>{data.error || "Not Found"}</h1>
 				</div>
 			</div>

@@ -1,6 +1,4 @@
 import { Feed } from "feed";
-import { ServerRenderContextData } from "muggle";
-import fetch from "node-fetch";
 import { Article } from "./blog/[slug]";
 
 export async function preload() {
@@ -10,7 +8,7 @@ export async function preload() {
 
 export default (
 	params: Record<string, string>,
-	conetxt: ServerRenderContextData,
+	conetxt: unknown,
 	posts: Article[],
 ) => {
 	const feed = new Feed({

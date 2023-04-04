@@ -1,5 +1,6 @@
 import { h, FunctionComponent } from "preact";
 import { useCallback, useRef } from "preact/hooks";
+import { toTop } from "../pages/blog/[slug]/post.css";
 
 const easeOutSine = (progress: number) => Math.sin((progress * Math.PI) / 2);
 
@@ -32,7 +33,7 @@ const GoToTop: FunctionComponent = () => {
 
 	return (
 		// rome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-		<div className="to-top icon-svg" onClick={gotoTop}>
+		<div className={toTop} onClick={gotoTop}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 20 20"

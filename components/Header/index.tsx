@@ -1,7 +1,7 @@
 import { h, FunctionComponent } from "preact";
 import { Head, Style, useAppContext } from "muggle";
 import Loading from "../../islands/Loading";
-import css from "./style.scss?inline";
+import * as styles from "./header.css.js";
 
 const Header: FunctionComponent = () => {
 	const { path } = useAppContext();
@@ -14,24 +14,32 @@ const Header: FunctionComponent = () => {
 	const isAboutPage = "/about/" === location;
 
 	return (
-		<header className={isHome ? "home" : undefined}>
+		<header className={isHome ? styles.homeHeader : styles.header}>
 			<Head>
-				<Style>{css}</Style>
+				<Style>{styles.default}</Style>
 			</Head>
 			<nav>
-				<a href="/" className={isHome ? "active" : undefined}>
+				<a href="/" className={isHome ? styles.activeLink : styles.link}>
 					首页
 				</a>
-				<a href="/works/" className={isWorksPage ? "active" : undefined}>
+				<a
+					href="/works/"
+					className={isWorksPage ? styles.activeLink : styles.link}
+				>
 					项目
 				</a>
 				<a
 					href="/blog/"
-					className={isBlogPage || isArticlePage ? "active" : undefined}
+					className={
+						isBlogPage || isArticlePage ? styles.activeLink : styles.link
+					}
 				>
 					文章
 				</a>
-				<a href="/about/" className={isAboutPage ? "active" : undefined}>
+				<a
+					href="/about/"
+					className={isAboutPage ? styles.activeLink : styles.link}
+				>
 					关于
 				</a>
 			</nav>
