@@ -18,7 +18,7 @@
 	"dependencies": {
 		"feed": "^4.2.2",
 		"marked": "^4.0.19",
-		"muggle": "^0.11.0",
+		"muggle": "^0.11.1",
 		"node-fetch": "^3.2.10",
 		"preact": "^10.10.6",
 		"sass": "^1.54.5",
