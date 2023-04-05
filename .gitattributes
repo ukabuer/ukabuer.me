@@ -1,0 +1,5 @@
+# Autodetect text files
+* text=auto
+
+# Force all text file types to have unix line endings
+*.* text eol=lf

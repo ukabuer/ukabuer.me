@@ -8,31 +8,22 @@
 		"dev": "muggle serve",
 		"build": "muggle build",
 		"preview": "muggle preview",
-		"test:lint": "eslint . --max-warnings=0",
-		"test:format": "prettier --check .",
-		"test": "npm run test:lint && npm run test:format"
+		"test": "rome ci ."
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@notionhq/client": "^2.2.3",
 		"@vanilla-extract/css": "^1.11.0",
 		"feed": "^4.2.2",
 		"marked": "^4.0.19",
-		"muggle": "^0.11.1",
+		"muggle": "^0.11.2",
 		"preact": "^10.10.6",
-		"sass": "^1.54.5",
 		"typescript": "^4.7.4"
 	},
 	"devDependencies": {
 		"@types/marked": "^4.0.6",
 		"@types/node": "^15.14.9",
-		"@typescript-eslint/eslint-plugin": "^5.34.0",
-		"@typescript-eslint/parser": "^5.34.0",
-		"eslint": "^7.32.0",
-		"eslint-plugin-react": "^7.30.1",
-		"eslint-plugin-react-hooks": "^4.6.0",
-		"prettier": "^2.7.1"
+		"rome": "^12.0.0"
 	}
 }
