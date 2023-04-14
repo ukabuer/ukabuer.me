@@ -1,9 +1,14 @@
 import { Feed } from "feed";
 import { Article } from "./blog/[slug]";
+import { isArray, query } from "../components/utils/data";
 
 export async function preload() {
-	const request = await fetch(`${process.env.API}/articles`);
-	return request.json();
+	const data = await query("/articles");
+	if (isArray(data)) {
+		return data.map((item) => item.attributes);
+	}
+
+	return [];
 }
 
 export default (
@@ -27,7 +32,7 @@ export default (
 			feed.addItem({
 				title: item.title,
 				id: `https://ukabuer.me/blog/${item.slug}`,
-				link: `https://ukabuer.me/blog/${item.slug}`,
+				link: item.external || `https://ukabuer.me/blog/${item.slug}`,
 				description: item.external
 					? item.title
 					: item.content.substring(0, 200),

@@ -2,7 +2,7 @@ import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
 import { marked } from "marked";
 import Layout from "../../components/Layout";
-import { API } from "../../components/utils";
+import { query } from "../../components/utils/data";
 import * as styles from "./about.css.js";
 
 type PageData = {
@@ -36,8 +36,9 @@ const AboutPage: FunctionComponent<Props> = ({ page }: Props) => {
 };
 
 export async function preload(): Promise<PageData> {
-	const page = (await (await fetch(`${API}/about`)).json()) as PageData;
+	const data = await query("/about");
 
+	const page = data.attributes as PageData;
 	page.content = marked(page.content);
 
 	return page;

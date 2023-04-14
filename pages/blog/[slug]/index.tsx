@@ -2,7 +2,8 @@ import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
 import { marked } from "marked";
 import Layout from "../../../components/Layout";
-import { formatDate, API } from "../../../components/utils";
+import { formatDate } from "../../../components/utils";
+import { isArray, query } from "../../../components/utils/data";
 import GoToTop from "../../../islands/GoToTop";
 import * as styles from "./post.css.js";
 
@@ -70,8 +71,10 @@ export async function preload(
 	params: Record<string, string>,
 ): Promise<unknown> {
 	const { slug } = params;
-	const request = await fetch(`${API}/articles?slug=${slug}`);
-	const posts = (await request.json()) as Article[];
+	const data = await query(`/articles?filters[slug][$eq]=${slug}`);
+	const posts = isArray(data)
+		? (data.map((i) => i.attributes) as Article[])
+		: [];
 
 	if (posts.length < 1) {
 		return {
