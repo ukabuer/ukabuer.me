@@ -1,7 +1,7 @@
 import { h, Fragment, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
 import Layout from "../../components/Layout";
-import { API } from "../../components/utils";
+import { query } from "../../components/utils/data";
 import * as styles from "./works.css.js";
 
 type PageData = {
@@ -104,9 +104,9 @@ const WorksPage: FunctionComponent<Props> = ({ page }: Props) => {
 };
 
 export async function preload(): Promise<unknown> {
-	const page = await (await fetch(`${API}/works`)).json();
+	const data = await query("/work");
 
-	return page;
+	return data.attributes;
 }
 
 export default WorksPage;

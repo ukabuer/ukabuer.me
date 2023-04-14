@@ -1,7 +1,8 @@
 import { h, FunctionComponent } from "preact";
 import { Head, Style } from "muggle";
 import Layout from "../../components/Layout";
-import { formatDate, API } from "../../components/utils";
+import { formatDate } from "../../components/utils";
+import { isArray, query } from "../../components/utils/data";
 import * as styles from "./blog.css.js";
 
 type Props = {
@@ -61,12 +62,11 @@ export type Article = {
 };
 
 export async function preload(): Promise<unknown> {
-	const page = (await (await fetch(`${API}/blog`)).json()) as Record<
-		string,
-		unknown
-	>;
-	const request = await fetch(`${API}/articles`);
-	const posts = (await request.json()) as Article[];
+	const page = (await query("/blog")).attributes;
+	const articles = await query("/articles");
+	const posts = isArray(articles)
+		? (articles.map((i) => i.attributes) as Article[])
+		: [];
 
 	const sorted = posts
 		.sort((a, b) => {

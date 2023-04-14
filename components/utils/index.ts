@@ -9,5 +9,3 @@ export function formatDate(time: Date): string {
 
 	return `${year}-${month}-${date}`;
 }
-
-export const API = process.env.API || "";

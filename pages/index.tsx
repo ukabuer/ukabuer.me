@@ -3,12 +3,20 @@ import { Head, Style } from "muggle";
 import Layout from "../components/Layout";
 import Banner from "../islands/Banner";
 import site from "../components/Layout/data";
-import { API } from "../components/utils";
+import { query } from "../components/utils/data";
 import * as styles from "./index.css.js";
 
 type Props = {
 	page: {
 		title: string;
+		author: {
+			introduce: string;
+			identities: string[];
+			socials: Array<{
+				name: string;
+				link: string;
+			}>;
+		};
 		projects: Array<{
 			title: string;
 			link: string;
@@ -36,9 +44,9 @@ const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
 							<div>
 								<span className={styles.cardTitle}>{site.author.name}</span>
 							</div>
-							<div>{site.author.identities.join(" / ")}</div>
+							<div>{page.author.identities.join(" / ")}</div>
 							<div className={styles.social}>
-								{site.author.social.map((social) => (
+								{page.author.socials.map((social) => (
 									<>
 										<a
 											href={social.link}
@@ -54,7 +62,7 @@ const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
 						</div>
 					</div>
 					<div className={styles.cardIntro}>
-						<span>{site.author.introduce}</span>
+						<span>{page.author.introduce}</span>
 					</div>
 				</div>
 
@@ -96,10 +104,10 @@ const IndexPage: FunctionComponent<Props> = ({ page }: Props) => {
 };
 
 export async function preload(): Promise<unknown> {
-	const request = await fetch(`${API}/home`);
-	const page = await request.json();
+	const home = await query("/home");
+	const author = await query("/author");
 
-	return page;
+	return { ...home.attributes, author: author.attributes };
 }
 
 export default IndexPage;
